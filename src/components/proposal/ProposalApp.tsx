@@ -83,7 +83,7 @@ export const ProposalApp = ({
     "Forever isn't long enough with you.",
   ];
 
-  // Keyboard navigation: Enter triggers focused button
+  // Keyboard navigation: Enter triggers focused button, Shift skips to next stage
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
@@ -92,10 +92,30 @@ export const ProposalApp = ({
           | null;
         if (activeButton) activeButton.click();
       }
+      // Shift key skips to next stage (for preview)
+      if (e.shiftKey && e.key === "Shift") {
+        const stageHandlers: Record<Stage, () => void> = {
+          landing: handleLandingContinue,
+          timeline: handleTimelineContinue,
+          memorycarousel: handleMemoryCarouselContinue,
+          reasonsforever: handleReasonsForeverContinue,
+          threewords: handleThreeWordsContinue,
+          quiz: handleQuizContinue,
+          pickone: handlePickOneContinue,
+          spinwheel: handleSpinWheelContinue,
+          prayer: handlePrayerContinue,
+          vow: handleVowContinue,
+          handwritten: handleHandwrittenContinue,
+          proposal: handleProposalAccept,
+          final: handleFinalDone,
+        };
+        const handler = stageHandlers[stage];
+        if (handler) handler();
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [stage, handleLandingContinue, handleTimelineContinue, handleMemoryCarouselContinue, handleReasonsForeverContinue, handleThreeWordsContinue, handleQuizContinue, handlePickOneContinue, handleSpinWheelContinue, handlePrayerContinue, handleVowContinue, handleHandwrittenContinue, handleProposalAccept, handleFinalDone]);
 
   // Flow handlers (updated: PickOne -> SpinWheel)
   const handleLandingContinue = useCallback(() => setStage("timeline"), []);
