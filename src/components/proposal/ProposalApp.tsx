@@ -79,7 +79,7 @@ export const ProposalApp = ({
     "This is my fav candid pic of us ever. Indha mari unkuda life long okaranum nu aasai.",
     "Andha few days lab moments ah marakkavye maaten. Un pakkathula irukka avlo pudikkum.",
     "First time onna neraiya neram okandhom. See how you look at me. Idhye mari paaru epomye.",
-    "The first dance with you. Dance varadhu nu therinjum unakaga aadunen.",
+    "The first dance with you. Dance varadhu nu therinjum unakaga aadunen. Semma jolly.",
     "The most beautiful and memorable birthday ever ma. Kammi wishes dhan vandhuchu, but i didnt feel about it because of you.",
   ];
 
