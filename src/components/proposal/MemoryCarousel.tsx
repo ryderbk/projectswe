@@ -47,7 +47,11 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
 
   const nextPhoto = () => {
     if (photos.length === 0) return;
-    setIndex((i) => (i + 1) % photos.length);
+    if (index === photos.length - 1) {
+      onContinue();
+    } else {
+      setIndex((i) => (i + 1) % photos.length);
+    }
   };
 
   const prevPhoto = () => {
