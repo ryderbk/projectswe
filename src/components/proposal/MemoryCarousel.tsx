@@ -127,15 +127,6 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
         </h1>
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
-          {/* Caption */}
-          {captions[index] && (
-            <div className="h-16 flex items-center justify-center mb-4">
-              <p className="text-center text-foreground font-serif italic text-sm leading-relaxed line-clamp-2">
-                {captions[index]}
-              </p>
-            </div>
-          )}
-
           {/* Image / Video */}
           <div className="w-full rounded-xl overflow-hidden soft-glow relative">
             {photos[index]?.endsWith(".mp4") ? (
@@ -160,6 +151,13 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
               />
             )}
           </div>
+
+          {/* Caption */}
+          {captions[index] && (
+            <p className="text-center text-foreground font-serif italic mt-4 mb-2">
+              {captions[index]}
+            </p>
+          )}
 
           {/* Controls */}
           <div className="flex justify-between mt-6">
