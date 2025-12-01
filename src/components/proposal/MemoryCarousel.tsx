@@ -135,6 +135,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                 src={photos[index]}
                 autoPlay
                 muted
+                loop
                 preload="auto"
                 className="w-full h-auto object-cover aspect-[4/3]"
               />
