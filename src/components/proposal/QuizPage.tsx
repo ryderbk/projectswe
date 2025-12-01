@@ -96,7 +96,7 @@ export const QuizPage = ({ onContinue }: QuizPageProps) => {
         }}
       >
         <h1 className="font-serif text-hero text-foreground mb-8">
-          What do you think I love the MOST about you? 🐼💗
+          What do you think I love the MOST about you? 💗
         </h1>
 
         <div className="glass-card p-8 rounded-2xl shadow-xl space-y-6">
