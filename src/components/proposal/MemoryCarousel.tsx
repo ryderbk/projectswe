@@ -14,6 +14,7 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
   const revealRef = useRef(false);
 
   const SMOOTH = 550;
+  const FADE_DURATION = 150; // Faster fade for snappy feel
 
   // Ensure index is valid if photos change
   useEffect(() => {
@@ -46,29 +47,28 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
     return () => window.removeEventListener("keydown", onKey);
   }, [photos.length]);
 
-  // Aggressive preload: load current, next, and previous media
+  // Ultra-aggressive preload: preload all media sequentially
   useEffect(() => {
-    const preloadMedia = (photoIndex: number) => {
-      const photoUrl = photos[photoIndex];
-      if (!photoUrl) return;
+    const preloadAll = async () => {
+      for (let i = 0; i < photos.length; i++) {
+        const photoUrl = photos[i];
+        if (!photoUrl) continue;
 
-      if (photoUrl.endsWith(".mp4")) {
-        const video = document.createElement("video");
-        video.preload = "auto"; // Load full video
-        video.crossOrigin = "anonymous";
-        video.src = photoUrl;
-      } else {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = photoUrl;
+        if (photoUrl.endsWith(".mp4")) {
+          const video = document.createElement("video");
+          video.preload = "auto";
+          video.crossOrigin = "anonymous";
+          video.src = photoUrl;
+        } else {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.src = photoUrl;
+        }
       }
     };
 
-    // Preload current, next, and previous
-    preloadMedia(index);
-    preloadMedia((index + 1) % photos.length);
-    preloadMedia((index - 1 + photos.length) % photos.length);
-  }, [index, photos]);
+    preloadAll();
+  }, [photos]);
 
   const nextPhoto = () => {
     if (photos.length === 0) return;
@@ -76,10 +76,8 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
     setLoading(true);
     setTimeout(() => {
       setIndex((i) => (i + 1) % photos.length);
-    }, 300);
-    setTimeout(() => {
       setFading(false);
-    }, 300);
+    }, FADE_DURATION);
   };
 
   const prevPhoto = () => {
@@ -88,16 +86,12 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
     setLoading(true);
     setTimeout(() => {
       setIndex((i) => (i - 1 + photos.length) % photos.length);
-    }, 300);
-    setTimeout(() => {
       setFading(false);
-    }, 300);
+    }, FADE_DURATION);
   };
 
   const handleMediaLoad = () => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
+    setLoading(false);
   };
 
   // --- EMPTY / FALLBACK UI ---
@@ -174,7 +168,7 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
               className="absolute inset-0 bg-white z-30 pointer-events-none"
               style={{
                 opacity: fading ? 1 : 0,
-                transition: "opacity 300ms ease-in-out",
+                transition: `opacity ${FADE_DURATION}ms ease-in-out`,
               }}
             />
             {loading && (
