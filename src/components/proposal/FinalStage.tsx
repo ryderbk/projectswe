@@ -71,7 +71,7 @@ export const FinalStage = ({ photoPath }: FinalStageProps) => {
   };
 
   // Content reveal
-  const contentStyle = {
+  const contentStyle: React.CSSProperties = {
     transition: `opacity ${SMOOTH_MS}ms cubic-bezier(.2,.9,.3,1), transform ${SMOOTH_MS}ms cubic-bezier(.2,.9,.3,1)`,
     opacity: contentVisible ? 1 : 0,
     transform: contentVisible ? "translateY(0)" : "translateY(-10px)",
