@@ -42,18 +42,18 @@ export const FinalStage = ({ photoPath }: FinalStageProps) => {
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(photoPath);
+      const response = await fetch("/assets/memories/us🤍.zip");
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "our-special-moment.jpg";
+      a.download = "us🤍.zip";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     } catch {
-      window.open(photoPath, "_blank");
+      console.error("Download failed");
     }
   };
 
@@ -182,22 +182,9 @@ export const FinalStage = ({ photoPath }: FinalStageProps) => {
             <button
               onClick={handleDownload}
               className="btn-romantic flex items-center justify-center gap-2"
-              aria-label="Download the photo"
+              aria-label="Save memories"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
-              </svg>
-              Save Photo
+              Save 🤍
             </button>
           </div>
 
