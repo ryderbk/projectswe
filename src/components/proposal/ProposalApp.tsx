@@ -13,6 +13,17 @@ import { ProposalRevealStage } from "./ProposalRevealStage";
 import { FinalStage } from "./FinalStage";
 import { AudioController } from "./AudioController";
 import HandwrittenLetter from "./HandwrittenLetter";
+import memoryA from "@/assets/memories/a.png";
+import memoryB from "@/assets/memories/b.png";
+import memoryC from "@/assets/memories/c.png";
+import memoryD from "@/assets/memories/D.jpg";
+import memoryE from "@/assets/memories/e.png";
+import memoryF from "@/assets/memories/F.jpg";
+import memoryG from "@/assets/memories/g.png";
+import memoryH from "@/assets/memories/H.mp4";
+import memoryI from "@/assets/memories/I.mp4";
+import memoryJ from "@/assets/memories/J.mp4";
+import memoryK from "@/assets/memories/K.mp4";
 
 type Stage =
   | "landing"
@@ -41,6 +52,21 @@ export const ProposalApp = ({
   startStage = "landing",
 }: ProposalAppProps) => {
   const [stage, setStage] = useState<Stage>(startStage);
+
+  // Memory carousel photos in alphabetical order
+  const memories = [
+    memoryA,
+    memoryB,
+    memoryC,
+    memoryD,
+    memoryE,
+    memoryF,
+    memoryG,
+    memoryH,
+    memoryI,
+    memoryJ,
+    memoryK,
+  ];
 
   // Keyboard navigation: Enter triggers focused button
   useEffect(() => {
@@ -102,7 +128,7 @@ export const ProposalApp = ({
       {stage === "timeline" && <Timeline onContinue={handleTimelineContinue} />}
 
       {stage === "memorycarousel" && (
-        <MemoryCarousel onContinue={handleMemoryCarouselContinue} photos={[photoPath ?? "/placeholder.svg"]} />
+        <MemoryCarousel onContinue={handleMemoryCarouselContinue} photos={memories} />
       )}
 
       {stage === "reasonsforever" && <ReasonsForever onContinue={handleReasonsForeverContinue} />}

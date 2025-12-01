@@ -121,18 +121,26 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
         </h1>
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
-          {/* Image */}
+          {/* Image / Video */}
           <div className="w-full rounded-xl overflow-hidden soft-glow">
-            <img
-              src={photos[index]}
-              alt={`Memory ${index + 1}`}
-              className="w-full h-auto object-cover aspect-[4/3]"
-              onError={(e) => {
-                // graceful fallback if image fails to load
-                (e.currentTarget as HTMLImageElement).src =
-                  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='100%25' height='100%25' fill='%23f8f4f6'/%3E%3Ctext x='50%25' y='50%25' fill='%23999' font-family='Arial' font-size='24' dominant-baseline='middle' text-anchor='middle'%3EImage not available%3C/text%3E%3C/svg%3E";
-              }}
-            />
+            {photos[index]?.endsWith(".mp4") ? (
+              <video
+                src={photos[index]}
+                controls
+                className="w-full h-auto object-cover aspect-[4/3]"
+              />
+            ) : (
+              <img
+                src={photos[index]}
+                alt={`Memory ${index + 1}`}
+                className="w-full h-auto object-cover aspect-[4/3]"
+                onError={(e) => {
+                  // graceful fallback if image fails to load
+                  (e.currentTarget as HTMLImageElement).src =
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='100%25' height='100%25' fill='%23f8f4f6'/%3E%3Ctext x='50%25' y='50%25' fill='%23999' font-family='Arial' font-size='24' dominant-baseline='middle' text-anchor='middle'%3EImage not available%3C/text%3E%3C/svg%3E";
+                }}
+              />
+            )}
           </div>
 
           {/* Controls */}
