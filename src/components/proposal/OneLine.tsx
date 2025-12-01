@@ -1,8 +1,8 @@
-// src/components/proposal/ThreeWords.tsx
+// src/components/proposal/OneLine.tsx
 import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
 
-interface ThreeWordsProps {
+interface OneLineProps {
   onContinue: () => void;
 }
 
@@ -62,7 +62,7 @@ const CinematicText = ({
   );
 };
 
-export const ThreeWords = ({ onContinue }: ThreeWordsProps) => {
+export const OneLine = ({ onContinue }: OneLineProps) => {
   const [mounted, setMounted] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const revealRef = useRef(false);
@@ -168,4 +168,4 @@ export const ThreeWords = ({ onContinue }: ThreeWordsProps) => {
   );
 };
 
-export default ThreeWords;
+export default OneLine;

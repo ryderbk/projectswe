@@ -3,7 +3,7 @@ import { LandingStage } from "./LandingStage";
 import { Timeline } from "./Timeline";
 import { MemoryCarousel } from "./MemoryCarousel";
 import { ReasonsForever } from "./ReasonsForever";
-import { ThreeWords } from "./ThreeWords";
+import { OneLine } from "./OneLine";
 import { QuizPage } from "./QuizPage";
 import { PickOne } from "./PickOne";
 import { SpinWheel } from "./SpinWheel";
@@ -170,7 +170,7 @@ export const ProposalApp = ({
 
       {stage === "reasonsforever" && <ReasonsForever onContinue={handleReasonsForeverContinue} />}
 
-      {stage === "threewords" && <ThreeWords onContinue={handleThreeWordsContinue} />}
+      {stage === "threewords" && <OneLine onContinue={handleThreeWordsContinue} />}
 
       {stage === "quiz" && <QuizPage onContinue={handleQuizContinue} />}
 
