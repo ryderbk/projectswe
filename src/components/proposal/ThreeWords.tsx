@@ -103,7 +103,7 @@ export const ThreeWords = ({ onContinue }: ThreeWordsProps) => {
         }}
       >
         {/* Title */}
-        <h1 className="font-serif text-hero text-foreground mb-6">A Line for US💎</h1>
+        <h1 className="font-serif text-hero text-foreground mb-6">A Line for US💗</h1>
 
         {/* Card */}
         <div className="glass-card p-8 rounded-2xl shadow-xl mb-8">
