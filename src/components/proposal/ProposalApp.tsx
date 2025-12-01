@@ -98,8 +98,8 @@ export const ProposalApp = ({
   // Handwritten -> ProposalRevealStage
   const handleHandwrittenContinue = useCallback(() => setStage("proposal"), []);
   const handleProposalAccept = useCallback(() => {
-    // keep a short celebration delay before final
-    setTimeout(() => setStage("final"), 1200);
+    // transition to final stage
+    setStage("final");
   }, []);
   const handleFinalDone = useCallback(() => {
     /* final end — you can route elsewhere or show a share UI */
