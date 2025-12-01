@@ -1,6 +1,7 @@
 // src/components/proposal/PickOne.tsx
 import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
+import { captureAndDownload } from "./screenshotUtils";
 
 interface PickOneProps {
   onContinue: () => void;
@@ -44,13 +45,14 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
     if (choice === id) return;
     setChoice(id);
 
-    setTimeout(() => {
+    setTimeout(async () => {
+      await captureAndDownload("pickone-container", `picked-${options[id].title}.png`);
       onContinue();
     }, SELECT_DELAY);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+    <div id="pickone-container" className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
       {/* Background */}
       <div
         className="fixed inset-0 z-0"

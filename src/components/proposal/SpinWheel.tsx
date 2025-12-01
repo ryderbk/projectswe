@@ -1,6 +1,7 @@
 // src/components/proposal/SpinWheel.tsx
 import React, { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
+import { captureAndDownload } from "./screenshotUtils";
 
 interface SpinWheelProps {
   onContinue: () => void;
@@ -181,6 +182,7 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
       <FloatingHearts />
 
       <div
+        id="spinwheel-container"
         className="relative z-10 text-center max-w-xl w-full"
         style={{
           transition: "opacity 550ms ease, transform 550ms ease",
@@ -250,7 +252,10 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
 
             {result && (
               <>
-                <button onClick={onContinue} className="btn-romantic px-8 py-3">
+                <button onClick={async () => {
+                  await captureAndDownload("spinwheel-container", "spin-wheel-result.png");
+                  onContinue();
+                }} className="btn-romantic px-8 py-3">
                   Done ✓
                 </button>
 

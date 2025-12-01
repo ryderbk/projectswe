@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
+import { captureAndDownload } from "./screenshotUtils";
 
 interface HandwrittenLetterProps {
   onContinue?: () => void;
@@ -30,6 +31,7 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
       <FloatingHearts />
 
       <div
+        id="letter-container"
         className="relative z-10 w-[96vw]"
         style={{
           transition: `opacity ${SMOOTH}ms ease, transform ${SMOOTH}ms ease`,
@@ -182,7 +184,8 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
               {/* BUTTON AT THE END */}
               <div className="mt-6 flex justify-end">
                 <button
-                  onClick={() => {
+                  onClick={async () => {
+                    await captureAndDownload("letter-container", "my-letter.png");
                     setMounted(false);
                     setTimeout(() => onContinue && onContinue(), 180);
                   }}
