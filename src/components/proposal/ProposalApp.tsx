@@ -83,19 +83,19 @@ export const ProposalApp = ({
     "The most beautiful and memorable birthday ever ma. Kammi wishes dhan vandhuchu, but i didn't feel about it because of you.",
   ];
 
-  // Flow handlers (updated: PickOne -> SpinWheel)
+  // Flow handlers (rearranged: memory page after vow, before handwritten)
   const handleLandingContinue = useCallback(() => setStage("timeline"), []);
-  const handleTimelineContinue = useCallback(() => setStage("memorycarousel"), []);
-  const handleMemoryCarouselContinue = useCallback(() => setStage("reasonsforever"), []);
+  const handleTimelineContinue = useCallback(() => setStage("reasonsforever"), []);
+  const handleMemoryCarouselContinue = useCallback(() => setStage("handwritten"), []);
   const handleReasonsForeverContinue = useCallback(() => setStage("threewords"), []);
   const handleThreeWordsContinue = useCallback(() => setStage("quiz"), []);
   const handleQuizContinue = useCallback(() => setStage("pickone"), []);
   const handlePickOneContinue = useCallback(() => setStage("spinwheel"), []);
   const handleSpinWheelContinue = useCallback(() => setStage("prayer"), []);
   const handlePrayerContinue = useCallback(() => setStage("vow"), []);
-  // New: after Vow -> show HandwrittenLetter
-  const handleVowContinue = useCallback(() => setStage("handwritten"), []);
-  // Handwritten -> ProposalRevealStage
+  // After Vow -> Memory carousel
+  const handleVowContinue = useCallback(() => setStage("memorycarousel"), []);
+  // Memory carousel -> Handwritten letter
   const handleHandwrittenContinue = useCallback(() => setStage("proposal"), []);
   const handleProposalAccept = useCallback(() => {
     // transition to final stage
