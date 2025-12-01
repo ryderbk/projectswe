@@ -191,7 +191,7 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
         {/* Heading (inline heart) */}
         <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-8 whitespace-nowrap flex items-center justify-center gap-2">
           <span>See what you dare to do</span>
-          <span className="inline-flex items-center translate-y-[1px]">💜</span>
+          <span className="inline-flex items-center translate-y-[1px]">😉</span>
         </h1>
 
         <div className="glass-card p-8 rounded-2xl shadow-xl flex flex-col items-center gap-6">
