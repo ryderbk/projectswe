@@ -10,6 +10,7 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
   const [index, setIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fading, setFading] = useState(false);
   const revealRef = useRef(false);
 
   const SMOOTH = 550;
@@ -71,14 +72,22 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
 
   const nextPhoto = () => {
     if (photos.length === 0) return;
-    setLoading(true);
-    setIndex((i) => (i + 1) % photos.length);
+    setFading(true);
+    setTimeout(() => {
+      setLoading(true);
+      setIndex((i) => (i + 1) % photos.length);
+      setTimeout(() => setFading(false), 50);
+    }, 300);
   };
 
   const prevPhoto = () => {
     if (photos.length === 0) return;
-    setLoading(true);
-    setIndex((i) => (i - 1 + photos.length) % photos.length);
+    setFading(true);
+    setTimeout(() => {
+      setLoading(true);
+      setIndex((i) => (i - 1 + photos.length) % photos.length);
+      setTimeout(() => setFading(false), 50);
+    }, 300);
   };
 
   const handleMediaLoad = () => {
@@ -154,6 +163,14 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
           {/* Image / Video */}
           <div className="w-full rounded-xl overflow-hidden soft-glow relative bg-gray-100">
+            {/* White Fade Overlay */}
+            <div
+              className="absolute inset-0 bg-white z-30 pointer-events-none"
+              style={{
+                opacity: fading ? 1 : 0,
+                transition: "opacity 300ms ease-in-out",
+              }}
+            />
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-20">
                 <div className="flex flex-col items-center gap-2">
