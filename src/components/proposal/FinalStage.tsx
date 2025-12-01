@@ -42,16 +42,13 @@ export const FinalStage = ({ photoPath }: FinalStageProps) => {
 
   const handleDownload = async () => {
     try {
-      const response = await fetch("/assets/memories/us🤍.zip");
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "us🤍.zip";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      const zipPath = new URL("../assets/memories/us🤍.zip", import.meta.url).href;
+      const link = document.createElement("a");
+      link.href = zipPath;
+      link.download = "us🤍.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch {
       console.error("Download failed");
     }
