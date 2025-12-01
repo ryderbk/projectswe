@@ -151,12 +151,11 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
           {/* Image / Video */}
-          <div className="w-full rounded-xl overflow-hidden soft-glow relative">
+          <div className="w-full rounded-xl overflow-hidden soft-glow relative bg-gray-100">
             {loading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/10 z-20">
+              <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-20">
                 <div className="flex flex-col items-center gap-2">
-                  <div className="w-8 h-8 border-3 border-pink-200 border-t-pink-500 rounded-full animate-spin" />
-                  <p className="text-sm text-muted-foreground">Loading...</p>
+                  <div className="w-6 h-6 border-2 border-pink-200 border-t-pink-500 rounded-full animate-spin" />
                 </div>
               </div>
             )}
