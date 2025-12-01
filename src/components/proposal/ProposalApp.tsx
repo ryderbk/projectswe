@@ -75,7 +75,7 @@ export const ProposalApp = ({
     "First day of tvs intern. En face depressed ah irukkum, Cuz namma pesikala.",
     "Last day of tvs intern. Namma friends aanom. Yen face paaru, This is how you rule my mood.",
     "Unakaga sivaraj kuda sanda poten. Semma happy. But bus la total mood out.",
-    "Our period la oru vaati achu unna paathye aavanum enakku.",
+    "Our period la oru vaati achu unna paathye aavanum enakku, Cuz you are so pretty ma.",
     "This is my fav candid pic of us ever. Indha mari unkuda life long okaranum nu aasai.",
     "Andha few days lab moments ah marakkavye maaten. Un pakkathula irukka avlo pudikkum.",
     "First time onna neraiya neram okandhom. See how you look at me. Idhye mari paaru epomye.",
