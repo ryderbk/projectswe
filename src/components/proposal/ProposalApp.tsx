@@ -73,7 +73,7 @@ export const ProposalApp = ({
     "Our first unofficial pic, Andha time la unkuda 2 mins pesa mudiyadha nu nenachen.",
     "Indha pic edukkura apo I made efforts to stand near you.",
     "First day of tvs intern. En face depressed ah irukkum, Cuz namma pesikala.",
-    "Last day of tvs intern. Namma friends aanom. Yen face paaru, This is how you are rule my mood.",
+    "Last day of tvs intern. Namma friends aanom. Yen face paaru, This is how you rule my mood.",
     "Unakaga sivaraj kuda sanda poten. Semma happy. But bus la total mood out.",
     "Our period la oru vaati achu unna paathye aavanum enakku.",
     "This is my fav candid pic of us ever. Indha mari unkuda life long okaranum nu aasai.",
