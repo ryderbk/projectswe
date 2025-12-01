@@ -150,6 +150,21 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
               />
             )}
           </div>
+
+          {/* Controls */}
+          <div className="flex justify-between mt-6">
+            <button onClick={prevPhoto} className="btn-secondary-romantic px-6">
+              ‹ Prev
+            </button>
+            <button onClick={nextPhoto} className="btn-secondary-romantic px-6">
+              Next ›
+            </button>
+          </div>
+
+          {/* Indicator */}
+          <p className="text-muted-foreground text-sm mt-4">
+            {index + 1} / {photos.length}
+          </p>
         </div>
       </div>
     </div>
