@@ -73,25 +73,31 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
   const nextPhoto = () => {
     if (photos.length === 0) return;
     setFading(true);
+    setLoading(true);
     setTimeout(() => {
-      setLoading(true);
       setIndex((i) => (i + 1) % photos.length);
-      setTimeout(() => setFading(false), 50);
+    }, 300);
+    setTimeout(() => {
+      setFading(false);
     }, 300);
   };
 
   const prevPhoto = () => {
     if (photos.length === 0) return;
     setFading(true);
+    setLoading(true);
     setTimeout(() => {
-      setLoading(true);
       setIndex((i) => (i - 1 + photos.length) % photos.length);
-      setTimeout(() => setFading(false), 50);
+    }, 300);
+    setTimeout(() => {
+      setFading(false);
     }, 300);
   };
 
   const handleMediaLoad = () => {
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
   };
 
   // --- EMPTY / FALLBACK UI ---
