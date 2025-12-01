@@ -68,6 +68,22 @@ export const ProposalApp = ({
     memoryK,
   ];
 
+  // Preload all memories immediately on app load
+  useEffect(() => {
+    memories.forEach((mediaUrl) => {
+      if (mediaUrl.endsWith(".mp4")) {
+        const video = document.createElement("video");
+        video.preload = "auto";
+        video.crossOrigin = "anonymous";
+        video.src = mediaUrl;
+      } else {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = mediaUrl;
+      }
+    });
+  }, []);
+
   // Keyboard navigation: Enter triggers focused button
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
