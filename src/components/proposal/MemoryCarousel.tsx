@@ -127,14 +127,15 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
         </h1>
 
         {/* Polaroid Card */}
-        <div className="bg-white p-4 shadow-2xl mb-10" style={{
+        <div className="bg-white shadow-2xl mb-10" style={{
           transform: "perspective(1000px) rotateY(-2deg) rotateX(2deg)",
           width: "100%",
-          maxWidth: "400px",
-          margin: "0 auto"
+          maxWidth: "320px",
+          margin: "0 auto",
+          aspectRatio: "3/4"
         }}>
           {/* Polaroid Image */}
-          <div className="w-full overflow-hidden bg-white">
+          <div className="w-full h-2/3 overflow-hidden bg-white p-3">
             {photos[index]?.endsWith(".mp4") ? (
               <video
                 key={photos[index]}
@@ -142,13 +143,13 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                 autoPlay
                 muted
                 preload="auto"
-                className="w-full h-auto object-cover aspect-[4/3]"
+                className="w-full h-full object-cover"
               />
             ) : (
               <img
                 src={photos[index]}
                 alt={`Memory ${index + 1}`}
-                className="w-full h-auto object-cover aspect-[4/3]"
+                className="w-full h-full object-cover"
                 onError={(e) => {
                   // graceful fallback if image fails to load
                   (e.currentTarget as HTMLImageElement).src =
@@ -159,11 +160,13 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
           </div>
 
           {/* Polaroid Caption */}
-          {captions[index] && (
-            <p className="text-center text-foreground font-serif italic pt-4 pb-2 text-sm px-2">
-              {captions[index]}
-            </p>
-          )}
+          <div className="h-1/3 bg-white flex items-center justify-center px-3 py-3">
+            {captions[index] && (
+              <p className="text-center text-foreground font-serif italic text-xs leading-relaxed">
+                {captions[index]}
+              </p>
+            )}
+          </div>
 
         </div>
 
