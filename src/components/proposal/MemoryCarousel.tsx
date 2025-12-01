@@ -170,7 +170,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
           </div>
 
           {/* Indicator */}
-          <p className="text-muted-foreground text-sm mt-4 text-center">
+          <p className="text-muted-foreground text-lg mt-4 text-center">
             {index + 1} / {photos.length}
           </p>
         </div>
