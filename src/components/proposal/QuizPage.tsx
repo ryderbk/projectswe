@@ -95,12 +95,11 @@ export const QuizPage = ({ onContinue }: QuizPageProps) => {
           pointerEvents: showFullscreen ? "none" : "auto",
         }}
       >
-        <h1 className="font-serif text-hero text-foreground mb-8">A Small Quiz 🐼💗</h1>
+        <h1 className="font-serif text-hero text-foreground mb-8">
+          What do you think I love the MOST about you? 🐼💗
+        </h1>
 
         <div className="glass-card p-8 rounded-2xl shadow-xl space-y-6">
-          <p className="text-lg text-muted-foreground mb-4">
-            What do you think I love the MOST about you?
-          </p>
 
           <div className="space-y-3">
             {visibleOptions.map((ans) => {
