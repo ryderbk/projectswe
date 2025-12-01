@@ -68,6 +68,21 @@ export const ProposalApp = ({
     memoryK,
   ];
 
+  // Random captions for each memory
+  const memoryCaptions = [
+    "Every moment with you is a treasure I hold close to my heart.",
+    "You make ordinary days feel extraordinary.",
+    "In your eyes, I found my home.",
+    "Laughter is our love language.",
+    "Together, we paint the world in colors.",
+    "You are my greatest adventure.",
+    "Every smile with you is a memory I'll cherish forever.",
+    "Our story is my favorite song.",
+    "You make my heart skip a beat.",
+    "In a world full of chaos, you're my peace.",
+    "Forever isn't long enough with you.",
+  ];
+
   // Keyboard navigation: Enter triggers focused button
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -128,7 +143,7 @@ export const ProposalApp = ({
       {stage === "timeline" && <Timeline onContinue={handleTimelineContinue} />}
 
       {stage === "memorycarousel" && (
-        <MemoryCarousel onContinue={handleMemoryCarouselContinue} photos={memories} />
+        <MemoryCarousel onContinue={handleMemoryCarouselContinue} photos={memories} captions={memoryCaptions} />
       )}
 
       {stage === "reasonsforever" && <ReasonsForever onContinue={handleReasonsForeverContinue} />}

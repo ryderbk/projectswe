@@ -4,9 +4,10 @@ import { FloatingHearts } from "./FloatingHearts";
 interface MemoryCarouselProps {
   onContinue: () => void;
   photos?: string[]; // now optional
+  captions?: string[]; // optional captions for each photo
 }
 
-export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps) => {
+export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: MemoryCarouselProps) => {
   const [index, setIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   const revealRef = useRef(false);
@@ -150,6 +151,13 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
               />
             )}
           </div>
+
+          {/* Caption */}
+          {captions[index] && (
+            <p className="text-center text-foreground font-serif italic mt-4 mb-2">
+              {captions[index]}
+            </p>
+          )}
 
           {/* Controls */}
           <div className="flex justify-between mt-6">
