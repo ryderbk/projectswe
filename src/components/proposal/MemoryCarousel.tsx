@@ -45,7 +45,7 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
     return () => window.removeEventListener("keydown", onKey);
   }, [photos.length]);
 
-  // Preload adjacent media
+  // Aggressive preload: load current, next, and previous media
   useEffect(() => {
     const preloadMedia = (photoIndex: number) => {
       const photoUrl = photos[photoIndex];
@@ -53,18 +53,20 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
 
       if (photoUrl.endsWith(".mp4")) {
         const video = document.createElement("video");
-        video.preload = "metadata";
+        video.preload = "auto"; // Load full video
+        video.crossOrigin = "anonymous";
         video.src = photoUrl;
       } else {
         const img = new Image();
+        img.crossOrigin = "anonymous";
         img.src = photoUrl;
       }
     };
 
-    const nextIndex = (index + 1) % photos.length;
-    const prevIndex = (index - 1 + photos.length) % photos.length;
-    preloadMedia(nextIndex);
-    preloadMedia(prevIndex);
+    // Preload current, next, and previous
+    preloadMedia(index);
+    preloadMedia((index + 1) % photos.length);
+    preloadMedia((index - 1 + photos.length) % photos.length);
   }, [index, photos]);
 
   const nextPhoto = () => {
@@ -165,7 +167,8 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
                 src={photos[index]}
                 autoPlay
                 muted
-                onLoadedMetadata={handleMediaLoad}
+                onCanPlay={handleMediaLoad}
+                preload="auto"
                 className="w-full h-auto object-cover aspect-[4/3]"
               />
             ) : (
