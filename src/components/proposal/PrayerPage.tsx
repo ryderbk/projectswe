@@ -60,7 +60,7 @@ export const PrayerPage = ({ onContinue }: PrayerPageProps) => {
         {/* Heading with inline emoji kept on the same line */}
         <h1 className="font-serif text-hero text-foreground mb-6 whitespace-nowrap flex items-center justify-center gap-2">
           <span>A Small Prayer For Us</span>
-          <span className="inline-flex items-center translate-y-[1px]">🙏</span>
+          <span className="inline-flex items-center translate-y-[1px]">💫</span>
         </h1>
 
         <div className="glass-card p-8 rounded-2xl shadow-xl mb-8">
