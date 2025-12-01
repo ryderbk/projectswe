@@ -71,7 +71,7 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
         }}
       >
         <h1 className="font-serif text-hero text-foreground mb-6">
-          Pick One For Us — when we met on Reopen Day 🤍
+          Pick One For Us — when we met 🤍
         </h1>
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-8">
