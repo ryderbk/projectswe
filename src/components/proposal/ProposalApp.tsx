@@ -70,7 +70,7 @@ export const ProposalApp = ({
 
   // Memory captions
   const memoryCaptions = [
-    "Our first unofficial pic, Andha time la unkuda 2 mins pesa mudiyudha nu nenachen.",
+    "Our first unofficial pic, Andha time la unkuda 2 mins pesa mudiyadha nu nenachen.",
     "Indha pic edukkura apo I made efforts to stand near you.",
     "First day of tvs intern. En face depressed ah irukkum, Cuz namma pesikala.",
     "Last day of tvs intern. Namma friends aanom. Yen face paaru, this is how you are rule my mood.",
