@@ -126,9 +126,15 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
           Our Little Memories 🤍
         </h1>
 
-        <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
-          {/* Image / Video */}
-          <div className="w-full rounded-xl overflow-hidden soft-glow relative">
+        {/* Polaroid Card */}
+        <div className="bg-white p-4 shadow-2xl mb-10" style={{
+          transform: "perspective(1000px) rotateY(-2deg) rotateX(2deg)",
+          width: "100%",
+          maxWidth: "400px",
+          margin: "0 auto"
+        }}>
+          {/* Polaroid Image */}
+          <div className="w-full overflow-hidden bg-white">
             {photos[index]?.endsWith(".mp4") ? (
               <video
                 key={photos[index]}
@@ -152,28 +158,29 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
             )}
           </div>
 
-          {/* Caption */}
+          {/* Polaroid Caption */}
           {captions[index] && (
-            <p className="text-center text-foreground font-serif italic mt-4 mb-2">
+            <p className="text-center text-foreground font-serif italic pt-4 pb-2 text-sm px-2">
               {captions[index]}
             </p>
           )}
 
-          {/* Controls */}
-          <div className="flex justify-between mt-6">
-            <button onClick={prevPhoto} className="btn-secondary-romantic px-6">
-              ‹ Prev
-            </button>
-            <button onClick={nextPhoto} className="btn-secondary-romantic px-6">
-              Next ›
-            </button>
-          </div>
-
-          {/* Indicator */}
-          <p className="text-muted-foreground text-sm mt-4">
-            {index + 1} / {photos.length}
-          </p>
         </div>
+
+        {/* Controls */}
+        <div className="flex justify-between mt-8 w-full max-w-md">
+          <button onClick={prevPhoto} className="btn-secondary-romantic px-6">
+            ‹ Prev
+          </button>
+          <button onClick={nextPhoto} className="btn-secondary-romantic px-6">
+            Next ›
+          </button>
+        </div>
+
+        {/* Indicator */}
+        <p className="text-muted-foreground text-sm mt-6">
+          {index + 1} / {photos.length}
+        </p>
       </div>
     </div>
   );
