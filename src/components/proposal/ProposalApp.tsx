@@ -152,7 +152,7 @@ export const ProposalApp = ({
       {stage === "final" && <FinalStage photoPath={photoPath} />}
 
       {/* Audio controller */}
-      <AudioController audioPath={audioPath} currentStage={stageNumber} autoPlayOnStage={3} />
+      {audioPath && <AudioController audioPath={audioPath} />}
 
       {/* accessibility skip link */}
       <a

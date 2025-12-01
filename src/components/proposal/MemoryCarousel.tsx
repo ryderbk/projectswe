@@ -9,6 +9,7 @@ interface MemoryCarouselProps {
 export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps) => {
   const [index, setIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const revealRef = useRef(false);
 
   const SMOOTH = 550;
@@ -44,14 +45,42 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
     return () => window.removeEventListener("keydown", onKey);
   }, [photos.length]);
 
+  // Preload adjacent media
+  useEffect(() => {
+    const preloadMedia = (photoIndex: number) => {
+      const photoUrl = photos[photoIndex];
+      if (!photoUrl) return;
+
+      if (photoUrl.endsWith(".mp4")) {
+        const video = document.createElement("video");
+        video.preload = "metadata";
+        video.src = photoUrl;
+      } else {
+        const img = new Image();
+        img.src = photoUrl;
+      }
+    };
+
+    const nextIndex = (index + 1) % photos.length;
+    const prevIndex = (index - 1 + photos.length) % photos.length;
+    preloadMedia(nextIndex);
+    preloadMedia(prevIndex);
+  }, [index, photos]);
+
   const nextPhoto = () => {
     if (photos.length === 0) return;
+    setLoading(true);
     setIndex((i) => (i + 1) % photos.length);
   };
 
   const prevPhoto = () => {
     if (photos.length === 0) return;
+    setLoading(true);
     setIndex((i) => (i - 1 + photos.length) % photos.length);
+  };
+
+  const handleMediaLoad = () => {
+    setLoading(false);
   };
 
   // --- EMPTY / FALLBACK UI ---
@@ -122,22 +151,33 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
           {/* Image / Video */}
-          <div className="w-full rounded-xl overflow-hidden soft-glow">
+          <div className="w-full rounded-xl overflow-hidden soft-glow relative">
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/10 z-20">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-8 h-8 border-3 border-pink-200 border-t-pink-500 rounded-full animate-spin" />
+                  <p className="text-sm text-muted-foreground">Loading...</p>
+                </div>
+              </div>
+            )}
             {photos[index]?.endsWith(".mp4") ? (
               <video
                 src={photos[index]}
                 controls
+                onLoadedMetadata={handleMediaLoad}
                 className="w-full h-auto object-cover aspect-[4/3]"
               />
             ) : (
               <img
                 src={photos[index]}
                 alt={`Memory ${index + 1}`}
+                onLoad={handleMediaLoad}
                 className="w-full h-auto object-cover aspect-[4/3]"
                 onError={(e) => {
                   // graceful fallback if image fails to load
                   (e.currentTarget as HTMLImageElement).src =
                     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='100%25' height='100%25' fill='%23f8f4f6'/%3E%3Ctext x='50%25' y='50%25' fill='%23999' font-family='Arial' font-size='24' dominant-baseline='middle' text-anchor='middle'%3EImage not available%3C/text%3E%3C/svg%3E";
+                  setLoading(false);
                 }}
               />
             )}
