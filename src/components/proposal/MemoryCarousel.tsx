@@ -162,19 +162,6 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
             {index + 1} / {photos.length}
           </p>
         </div>
-
-        <button
-          onClick={() => {
-            if (index === photos.length - 1) {
-              onContinue();
-            } else {
-              nextPhoto();
-            }
-          }}
-          className="btn-romantic"
-        >
-          Next ❤️
-        </button>
       </div>
     </div>
   );
