@@ -162,8 +162,10 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
             )}
             {photos[index]?.endsWith(".mp4") ? (
               <video
+                key={photos[index]}
                 src={photos[index]}
-                controls
+                autoPlay
+                muted
                 onLoadedMetadata={handleMediaLoad}
                 className="w-full h-auto object-cover aspect-[4/3]"
               />
