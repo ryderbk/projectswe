@@ -66,7 +66,7 @@ export const OneLine = ({ onContinue }: OneLineProps) => {
   const [mounted, setMounted] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const revealRef = useRef(false);
-  const SMOOTH = 1200; // slowed as requested
+  const SMOOTH = 550;
 
   useEffect(() => {
     if (revealRef.current) return;
@@ -128,8 +128,8 @@ export const OneLine = ({ onContinue }: OneLineProps) => {
               <div>
                 <CinematicText
                   text="When I try to describe us, it always comes back to this..."
-                  duration={1100}
-                  delay={220}
+                  duration={550}
+                  delay={100}
                   className="text-base md:text-lg leading-relaxed"
                 />
                 <p className="text-sm text-muted-foreground mt-4">Tap to reveal.</p>
@@ -148,8 +148,8 @@ export const OneLine = ({ onContinue }: OneLineProps) => {
               >
                 <CinematicText
                   text="You and I are a perfect match🤍"
-                  duration={1200}
-                  delay={120}
+                  duration={550}
+                  delay={100}
                   className="text-xl md:text-2xl font-semibold drop-shadow-sm whitespace-nowrap text-primary"
                 />
               </div>
