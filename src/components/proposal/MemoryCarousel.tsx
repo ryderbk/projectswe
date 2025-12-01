@@ -126,16 +126,9 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
           Our Little Memories 🤍
         </h1>
 
-        {/* Polaroid Card */}
-        <div className="bg-white shadow-2xl mb-10" style={{
-          transform: "perspective(1000px) rotateY(-2deg) rotateX(2deg)",
-          width: "100%",
-          maxWidth: "320px",
-          margin: "0 auto",
-          aspectRatio: "3/4"
-        }}>
-          {/* Polaroid Image */}
-          <div className="w-full h-2/3 overflow-hidden bg-white p-3">
+        <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
+          {/* Image / Video */}
+          <div className="w-full rounded-xl overflow-hidden soft-glow relative">
             {photos[index]?.endsWith(".mp4") ? (
               <video
                 key={photos[index]}
@@ -143,13 +136,13 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                 autoPlay
                 muted
                 preload="auto"
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-cover aspect-[4/3]"
               />
             ) : (
               <img
                 src={photos[index]}
                 alt={`Memory ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-cover aspect-[4/3]"
                 onError={(e) => {
                   // graceful fallback if image fails to load
                   (e.currentTarget as HTMLImageElement).src =
@@ -159,31 +152,28 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
             )}
           </div>
 
-          {/* Polaroid Caption */}
-          <div className="h-1/3 bg-white flex items-center justify-center px-3 py-3">
-            {captions[index] && (
-              <p className="text-center text-foreground font-serif italic text-xs leading-relaxed">
-                {captions[index]}
-              </p>
-            )}
+          {/* Caption */}
+          {captions[index] && (
+            <p className="text-center text-foreground font-serif italic mt-4 mb-2">
+              {captions[index]}
+            </p>
+          )}
+
+          {/* Controls */}
+          <div className="flex justify-between mt-6">
+            <button onClick={prevPhoto} className="btn-secondary-romantic px-6">
+              ‹ Prev
+            </button>
+            <button onClick={nextPhoto} className="btn-secondary-romantic px-6">
+              Next ›
+            </button>
           </div>
 
+          {/* Indicator */}
+          <p className="text-muted-foreground text-sm mt-4">
+            {index + 1} / {photos.length}
+          </p>
         </div>
-
-        {/* Controls */}
-        <div className="flex justify-between mt-8 w-full max-w-md">
-          <button onClick={prevPhoto} className="btn-secondary-romantic px-6">
-            ‹ Prev
-          </button>
-          <button onClick={nextPhoto} className="btn-secondary-romantic px-6">
-            Next ›
-          </button>
-        </div>
-
-        {/* Indicator */}
-        <p className="text-muted-foreground text-sm mt-6">
-          {index + 1} / {photos.length}
-        </p>
       </div>
     </div>
   );
