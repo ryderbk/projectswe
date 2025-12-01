@@ -68,19 +68,19 @@ export const ProposalApp = ({
     memoryK,
   ];
 
-  // Random captions for each memory
+  // Memory captions
   const memoryCaptions = [
-    "Every moment with you is a treasure I hold close to my heart.",
-    "You make ordinary days feel extraordinary.",
-    "In your eyes, I found my home.",
-    "Laughter is our love language.",
-    "Together, we paint the world in colors.",
-    "You are my greatest adventure.",
-    "Every smile with you is a memory I'll cherish forever.",
-    "Our story is my favorite song.",
-    "You make my heart skip a beat.",
-    "In a world full of chaos, you're my peace.",
-    "Forever isn't long enough with you.",
+    "Our first unofficial pic, Andha time la unkuda 2 mins pesa mudiyudha nu nenachen.",
+    "Indha pic edukkura apo I made efforts to stand near you.",
+    "First day of tvs intern. En face depressed ah irukkum, Cuz namma pesikala.",
+    "Last day of tvs intern. Namma friends aanom. Yen face paaru, this is how you are rule my mood.",
+    "Unakaga sivaraj kuda sanda poten. Semma happy. But bus la total mood out.",
+    "Our period la oru vaati achu unna paathye aavanum enakku.",
+    "This is my fav candid pic of use ever. Indha mari unkuda life long okaranum nu aasai.",
+    "Andha few days lab moments ah marakkavye maaten. Un pakkathula irukka avlo pudikkum.",
+    "First time onna neraiya neram okandhom. See how you look at me. Idhye mari paaru epomye.",
+    "The first dance with you. Dance varadhu nu therinjum unakaga aadunen.",
+    "The most beautiful and memorable birthday ever ma. Kammi wishes dhan vandhuchu, but i didnt feel about it because of you.",
   ];
 
   // Flow handlers (updated: PickOne -> SpinWheel)
