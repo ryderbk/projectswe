@@ -157,8 +157,6 @@ export const FinalStage = ({ photoPath }: FinalStageProps) => {
               I'm going to hold your hand until the end.
             </p>
 
-            <p className="text-primary font-medium">{today}</p>
-
             <div
               className="mt-6 pt-6 border-t border-border"
               style={{
