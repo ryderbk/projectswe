@@ -80,7 +80,7 @@ export const ProposalApp = ({
     "Andha few days lab moments ah marakkavye maaten. Un pakkathula irukka avlo pudikkum.",
     "First time onna neraiya neram okandhom. See how you look at me. Idhye mari paaru epomye.",
     "The first dance with you. Dance varadhu nu therinjum unakaga aadunen. Semma jolly.",
-    "The most beautiful and memorable birthday ever ma. Kammi wishes dhan vandhuchu, but i didnt feel about it because of you.",
+    "The most beautiful and memorable birthday ever ma. Kammi wishes dhan vandhuchu, but i didn't feel about it because of you.",
   ];
 
   // Flow handlers (updated: PickOne -> SpinWheel)
