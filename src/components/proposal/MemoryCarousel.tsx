@@ -44,28 +44,6 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
     return () => window.removeEventListener("keydown", onKey);
   }, [photos.length]);
 
-  // Ultra-aggressive preload: preload all media sequentially
-  useEffect(() => {
-    const preloadAll = async () => {
-      for (let i = 0; i < photos.length; i++) {
-        const photoUrl = photos[i];
-        if (!photoUrl) continue;
-
-        if (photoUrl.endsWith(".mp4")) {
-          const video = document.createElement("video");
-          video.preload = "auto";
-          video.crossOrigin = "anonymous";
-          video.src = photoUrl;
-        } else {
-          const img = new Image();
-          img.crossOrigin = "anonymous";
-          img.src = photoUrl;
-        }
-      }
-    };
-
-    preloadAll();
-  }, [photos]);
 
   const nextPhoto = () => {
     if (photos.length === 0) return;
@@ -185,7 +163,16 @@ export const MemoryCarousel = ({ onContinue, photos = [] }: MemoryCarouselProps)
           </p>
         </div>
 
-        <button onClick={onContinue} className="btn-romantic">
+        <button
+          onClick={() => {
+            if (index === photos.length - 1) {
+              onContinue();
+            } else {
+              nextPhoto();
+            }
+          }}
+          className="btn-romantic"
+        >
           Next ❤️
         </button>
       </div>
