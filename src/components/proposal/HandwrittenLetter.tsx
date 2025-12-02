@@ -121,7 +121,28 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
                 }}
               >
                 <p className="mb-4 text-2xl font-semibold">
-                  YET TO WRITE
+                  Hii Swethu ma🤍!
+                </p>
+                <p className="mb-4">
+                  Eppadi irukku naa panna website? Unakagavye paathu paathu pannen😅. Actual ah un birthday ku indha mari pannalam nu nenachen aana time ila apo. I hope you loved it❤️. And indha letter la en mind la irukkardha soldren.
+                </p>
+                <p className="mb-4">
+                  Namma meet panni romba naal aagudhu laa. I miss you so much chellam🫂. Unnoda Smile😊, Eyes✨, Cute expressions🤗, Holding you hands💗, Meesai😂, Class time eye contacts🫶, Literally elamye miss pandren ma🫂. College epo reopen pannuvanga nu irukku😁.
+                </p>
+                <p className="mb-4">
+                  Ipo lam namma munna mari pesikalam nu feel aagudhu😔. Sila neram misunderstandings varudhu. Enakku unkuda fight pannanum nu endha intension um ila da🙃. Sila neram un mood puriyama veladuven but oru naal um unna hurt pannanum nu nenachadhilla da💓.
+                </p>
+                <p className="mb-4">
+                  Naa epomye correct ndra mari pesuren nu nenaikadha, thappu nah thappu nu sollu. Oru vela naa theriyama edhachu pannita enna asingama thitti puriya vei ma. Don't take it to your mind☹️. Nee un mind la edho overthink pandra nu nenaikiren. Apdi edhachu irundha open ah sollu ma. Edhacha irundhalum sollu naa purinjipen🫂🤍.
+                </p>
+                <p className="mb-4">
+                  Enna prechana vandhalum ego paaka maaten😌. Apo enakku oru reel niyabagam varum "It is not You vs Me, it is US vs the problem". Nee pandra sila vishiyam enakku hurt aagudhu dhan ila nu solala, But you are perfect for me ma🤌✨. Adhukku nu hurt pannitye irukadha, konjam aachu paavam paaru😅.
+                </p>
+                <p className="mb-4">
+                  Life la yaaru vittu koduthu adjust pannikirangalo avanga dha strong couples ku kelvi patturken. Nammalum adhye mari iruppom nu namburen💖. Make sure you make me blush everyday😁.
+                </p>
+                <p className="mb-4 text-xl font-semibold">
+                  And this is your lovely Mr. Kumarrr (Balli🦎😑) for my cute little Panda Bomma🐼🤍.
                 </p>
               </article>
 
