@@ -11,6 +11,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
   const [index, setIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [loadedMedia, setLoadedMedia] = useState<Set<number>>(new Set());
+  const [showEndMessage, setShowEndMessage] = useState(false);
   const revealRef = useRef(false);
 
   const SMOOTH = 550;
@@ -71,8 +72,10 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
 
   const nextPhoto = () => {
     if (photos.length === 0) return;
-    if (index === photos.length - 1) {
+    if (showEndMessage) {
       onContinue();
+    } else if (index === photos.length - 1) {
+      setShowEndMessage(true);
     } else {
       setIndex((i) => (i + 1) % photos.length);
     }
@@ -116,6 +119,39 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                 Add Later
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- END MESSAGE UI ---
+  if (showEndMessage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+        <div
+          className="fixed inset-0 z-0"
+          style={{
+            background:
+              "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 55%, hsl(30 100% 97%) 100%)",
+          }}
+        />
+        <FloatingHearts />
+        <div
+          className="relative z-10 w-full max-w-xl text-center"
+          style={{
+            transition: `opacity ${SMOOTH}ms ease, transform ${SMOOTH}ms ease`,
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? "translateY(0)" : "translateY(12px)",
+          }}
+        >
+          <div className="glass-card p-10 rounded-2xl shadow-xl">
+            <p className="font-serif text-2xl md:text-3xl text-foreground leading-relaxed">
+              Unkuda indha mari innum neraiya moments experience pannanum nu romba aasaiya irukku ma 🤍
+            </p>
+            <button onClick={onContinue} className="btn-romantic mt-8">
+              Continue ❤️
+            </button>
           </div>
         </div>
       </div>
