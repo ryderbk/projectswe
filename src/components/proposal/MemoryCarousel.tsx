@@ -155,7 +155,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
 
           {/* Caption */}
           {captions[index] && (
-            <p className="text-center text-foreground font-serif italic mt-4 mb-2 text-lg">
+            <p className="text-center text-foreground font-serif italic mt-4 mb-2 text-xl leading-relaxed tracking-wide">
               {captions[index]}
             </p>
           )}
