@@ -10,9 +10,32 @@ interface MemoryCarouselProps {
 export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: MemoryCarouselProps) => {
   const [index, setIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [loadedMedia, setLoadedMedia] = useState<Set<number>>(new Set());
   const revealRef = useRef(false);
 
   const SMOOTH = 550;
+
+  // Preload all photos and videos on mount
+  useEffect(() => {
+    if (photos.length === 0) return;
+    
+    photos.forEach((src, i) => {
+      if (src.endsWith(".mp4")) {
+        const video = document.createElement("video");
+        video.preload = "auto";
+        video.src = src;
+        video.onloadeddata = () => {
+          setLoadedMedia(prev => new Set(prev).add(i));
+        };
+      } else {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+          setLoadedMedia(prev => new Set(prev).add(i));
+        };
+      }
+    });
+  }, [photos]);
 
   // Ensure index is valid if photos change
   useEffect(() => {
@@ -129,6 +152,11 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
           {/* Image / Video */}
           <div className="w-full rounded-xl overflow-hidden soft-glow relative">
+            {!loadedMedia.has(index) && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
+                <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+              </div>
+            )}
             {photos[index]?.endsWith(".mp4") ? (
               <video
                 key={photos[index]}
@@ -136,6 +164,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                 autoPlay
                 muted
                 loop
+                playsInline
                 preload="auto"
                 className="w-full h-auto object-cover aspect-[4/3]"
               />
@@ -143,9 +172,9 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
               <img
                 src={photos[index]}
                 alt={`Memory ${index + 1}`}
+                loading="eager"
                 className="w-full h-auto object-cover aspect-[4/3]"
                 onError={(e) => {
-                  // graceful fallback if image fails to load
                   (e.currentTarget as HTMLImageElement).src =
                     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='100%25' height='100%25' fill='%23f8f4f6'/%3E%3Ctext x='50%25' y='50%25' fill='%23999' font-family='Arial' font-size='24' dominant-baseline='middle' text-anchor='middle'%3EImage not available%3C/text%3E%3C/svg%3E";
                 }}
