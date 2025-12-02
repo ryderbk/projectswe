@@ -150,24 +150,29 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
         <div
           className="relative z-10 max-w-2xl mx-auto px-6 text-center"
           style={{
-            background: "white",
-            borderRadius: 16,
-            padding: "40px 36px",
-            boxShadow: "0 20px 50px rgba(16,24,40,0.08)",
-            minWidth: 280,
             transition: `opacity ${SMOOTH}ms cubic-bezier(.2,.9,.2,1), transform ${SMOOTH}ms cubic-bezier(.2,.9,.2,1)`,
             opacity: endMessageVisible && !endMessageExiting ? 1 : 0,
-            transform: endMessageVisible && !endMessageExiting ? "translateY(0) scale(1)" : "translateY(12px) scale(.97)",
+            transform: endMessageVisible && !endMessageExiting ? "translateY(0) scale(1)" : endMessageExiting ? "translateY(-20px) scale(.97)" : "translateY(30px) scale(.97)",
           }}
         >
-          <h2
-            className="font-serif text-3xl md:text-4xl text-primary mb-4"
+          <div
             style={{
-              lineHeight: 1.05,
+              background: "white",
+              borderRadius: 16,
+              padding: "36px 32px",
+              boxShadow: "0 20px 50px rgba(16,24,40,0.08)",
+              minWidth: 280,
             }}
           >
-            Unkuda indha mari innum neraiya moments experience pannanum nu romba aasaiya irukku ma 🤍
-          </h2>
+            <h2
+              className="font-serif text-2xl md:text-3xl text-primary"
+              style={{
+                lineHeight: 1.3,
+              }}
+            >
+              Unkuda indha mari innum neraiya moments experience pannanum nu romba aasaiya irukku ma 🤍
+            </h2>
+          </div>
 
           <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 24 }}>
             <button
