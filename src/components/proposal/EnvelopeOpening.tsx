@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
 import { FloatingSparkles } from "./FloatingSparkles";
+import envelopeImage from "@/assets/envelope.png";
 
 interface EnvelopeOpeningProps {
   onOpen?: () => void;
@@ -66,7 +67,7 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
                 perspective: "1200px",
               }}
             >
-              {/* Envelope Container */}
+              {/* Envelope Image */}
               <div
                 style={{
                   width: "100%",
@@ -78,78 +79,22 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
                   transition: `transform ${SMOOTH}ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity ${SMOOTH}ms ease`,
                 }}
               >
-                {/* Envelope Flap - Triangle pointing up (left side) */}
-                <div
+                <img
+                  src={envelopeImage}
+                  alt="Envelope"
                   style={{
-                    position: "absolute",
-                    top: "-45px",
-                    left: 0,
-                    width: 0,
-                    height: 0,
-                    borderLeft: "80px solid transparent",
-                    borderTop: "45px solid hsl(0 0% 93%)",
-                    transition: opened ? `all 550ms cubic-bezier(0.36, 0, 0.66, -0.56)` : "none",
-                    transform: opened ? "rotateX(-135deg) translateZ(20px)" : "rotateX(0deg)",
-                    transformOrigin: "top left",
-                    opacity: !opened ? 1 : 0,
-                  }}
-                />
-
-                {/* Envelope Flap - Triangle pointing up (right side) */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "-45px",
-                    right: 0,
-                    width: 0,
-                    height: 0,
-                    borderRight: "80px solid transparent",
-                    borderTop: "45px solid hsl(0 0% 93%)",
-                    transition: opened ? `all 550ms cubic-bezier(0.36, 0, 0.66, -0.56)` : "none",
-                    transform: opened ? "rotateX(-135deg) translateZ(20px)" : "rotateX(0deg)",
-                    transformOrigin: "top right",
-                    opacity: !opened ? 1 : 0,
-                  }}
-                />
-
-                {/* Envelope Body - White rectangle */}
-                <div
-                  style={{
-                    position: "relative",
                     width: "100%",
-                    height: "200px",
-                    background: "linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 96%) 100%)",
-                    borderRadius: "6px",
-                    border: "2px solid hsl(0 0% 82%)",
-                    boxShadow: "inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 12px 28px hsl(350 100% 74% / 0.12)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    height: "auto",
+                    filter: "drop-shadow(0 12px 28px hsl(350 100% 74% / 0.2))",
+                    transition: "transform 0.3s ease",
                   }}
-                >
-                  {/* Heart in center */}
-                  <div
-                    style={{
-                      fontSize: "56px",
-                      opacity: !opened ? 1 : 0,
-                      transition: `opacity 300ms ease`,
-                    }}
-                  >
-                    ❤️
-                  </div>
-
-                  {/* Optional center line decoration */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: 0,
-                      right: 0,
-                      height: "1px",
-                      background: "linear-gradient(90deg, transparent, hsl(0 0% 88%), transparent)",
-                    }}
-                  />
-                </div>
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "scale(1.05)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "scale(1)";
+                  }}
+                />
               </div>
 
               {/* Hover hint */}
