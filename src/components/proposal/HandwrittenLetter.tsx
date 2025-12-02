@@ -11,8 +11,11 @@ interface HandwrittenLetterProps {
 export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps) {
   const [mounted, setMounted] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
+  const [envelopeExiting, setEnvelopeExiting] = useState(false);
+  const [letterEntering, setLetterEntering] = useState(false);
   const mountedRef = useRef(false);
   const SMOOTH = 550;
+  const TRANSITION = 600;
 
   useEffect(() => {
     if (mountedRef.current) return;
@@ -20,17 +23,29 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
     requestAnimationFrame(() => requestAnimationFrame(() => setMounted(true)));
   }, []);
 
+  const handleEnvelopeOpen = () => {
+    setEnvelopeExiting(true);
+    setTimeout(() => {
+      setShowLetter(true);
+      setTimeout(() => {
+        setLetterEntering(true);
+      }, 50);
+    }, TRANSITION);
+  };
+
   if (!showLetter) {
     return (
-      <>
+      <div
+        style={{
+          transition: `opacity ${TRANSITION}ms ease, transform ${TRANSITION}ms ease`,
+          opacity: envelopeExiting ? 0 : 1,
+          transform: envelopeExiting ? "scale(0.95)" : "scale(1)",
+        }}
+      >
         <FloatingHearts />
         <FloatingSparkles />
-        <EnvelopeOpening
-          onOpen={() => {
-            setShowLetter(true);
-          }}
-        />
-      </>
+        <EnvelopeOpening onOpen={handleEnvelopeOpen} />
+      </div>
     );
   }
 
@@ -52,9 +67,9 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
         id="letter-container"
         className="relative z-10 w-[96vw]"
         style={{
-          transition: `opacity ${SMOOTH}ms ease, transform ${SMOOTH}ms ease`,
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? "translateY(0)" : "translateY(14px)",
+          transition: `opacity ${TRANSITION}ms cubic-bezier(.2,.9,.2,1), transform ${TRANSITION}ms cubic-bezier(.2,.9,.2,1)`,
+          opacity: letterEntering ? 1 : 0,
+          transform: letterEntering ? "translateY(0) scale(1)" : "translateY(40px) scale(0.97)",
         }}
       >
         <h1 className="font-serif text-4xl md:text-5xl text-foreground text-center mb-6">

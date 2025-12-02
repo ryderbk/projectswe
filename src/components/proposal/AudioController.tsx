@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import song2Path from "@/assets/Song2.mp3";
 
 interface AudioControllerProps {
   audioPath?: string;
@@ -6,27 +7,36 @@ interface AudioControllerProps {
 
 export const AudioController = ({ audioPath }: AudioControllerProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audio2Ref = useRef<HTMLAudioElement | null>(null);
+  const [currentSong, setCurrentSong] = useState<1 | 2>(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     if (!audioPath) return;
 
-    const audio = new Audio(audioPath);
-    audioRef.current = audio;
-    audio.loop = true;
-    audio.volume = 0.4;
+    const audio1 = new Audio(audioPath);
+    const audio2 = new Audio(song2Path);
+    audioRef.current = audio1;
+    audio2Ref.current = audio2;
+    
+    audio1.volume = 0.4;
+    audio2.volume = 0.4;
+    audio2.loop = true;
 
-    // Try autoplay immediately
+    audio1.addEventListener("ended", () => {
+      setCurrentSong(2);
+      audio2.play().catch(() => {});
+    });
+
     const tryPlay = () => {
-      audio
+      audio1
         .play()
         .then(() => {
           setIsPlaying(true);
         })
         .catch(() => {
-          // Autoplay blocked → wait for first click anywhere
           const enableOnClick = () => {
-            audio.play().then(() => {
+            audio1.play().then(() => {
               setIsPlaying(true);
               document.removeEventListener("click", enableOnClick);
             });
@@ -38,12 +48,14 @@ export const AudioController = ({ audioPath }: AudioControllerProps) => {
     tryPlay();
 
     return () => {
-      audio.pause();
+      audio1.pause();
+      audio2.pause();
       audioRef.current = null;
+      audio2Ref.current = null;
     };
   }, [audioPath]);
 
   if (!audioPath) return null;
 
-  return null; // no buttons, no UI — just autoplay
+  return null;
 };
