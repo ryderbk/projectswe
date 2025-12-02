@@ -152,7 +152,7 @@ export const FuturePage: React.FC<FuturePageProps> = ({
                 }`}
               >
                 <div className="text-4xl md:text-5xl mb-3">{it.emoji}</div>
-                <div className="font-medium text-lg text-gray-800">
+                <div className="font-medium text-lg text-gray-600">
                   {it.title}
                 </div>
                 {it.desc && (

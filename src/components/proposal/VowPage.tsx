@@ -179,7 +179,7 @@ export const VowPage: React.FC<VowPageProps> = ({
                   ${shown ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}`}
               >
                 <div className="p-5 rounded-2xl border bg-pink-50/40 shadow-sm text-center">
-                  <p className="text-lg md:text-xl text-gray-800 italic m-0">
+                  <p className="text-lg md:text-xl text-gray-600 italic m-0">
                     {v}
                   </p>
                 </div>
