@@ -1,10 +1,14 @@
-modules = ["bun"]
+modules = ["nodejs-20", "web"]
 [agent]
 expertMode = true
 
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 35941
+externalPort = 3001
 
 [[ports]]
 localPort = 39685
@@ -33,3 +37,6 @@ waitForPort = 5000
 
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[nix]
+channel = "stable-25_05"
