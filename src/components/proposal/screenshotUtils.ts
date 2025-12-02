@@ -8,25 +8,57 @@ export const captureAndDownload = async (elementId: string, filename: string) =>
       return;
     }
 
-    // Find scrollable elements and store their original scroll position
-    const scrollableElements = element.querySelectorAll('[style*="overflow"]');
-    const originalScrollPositions = new Map();
-    
-    scrollableElements.forEach((el: any) => {
-      originalScrollPositions.set(el, el.scrollTop);
-      el.scrollTop = 0;
+    // Store original styles
+    const originalStyles = {
+      height: element.style.height,
+      maxHeight: element.style.maxHeight,
+      overflow: element.style.overflow,
+      width: element.style.width,
+    };
+
+    // Store overflow hidden parent styles
+    const parents: Array<{element: HTMLElement, overflow: string, height: string}> = [];
+    let parent = element.parentElement;
+    while (parent) {
+      const computedStyle = window.getComputedStyle(parent);
+      if (computedStyle.overflow === 'hidden' || computedStyle.overflow === 'auto') {
+        parents.push({
+          element: parent,
+          overflow: parent.style.overflow,
+          height: parent.style.height,
+        });
+        parent.style.overflow = 'visible';
+        parent.style.height = 'auto';
+      }
+      parent = parent.parentElement;
+    }
+
+    // Reset element dimensions to auto for full capture
+    element.style.height = 'auto';
+    element.style.maxHeight = 'none';
+    element.style.overflow = 'visible';
+    element.style.width = 'auto';
+
+    // Reset scrollable children
+    const allScrollables = element.querySelectorAll('*');
+    const scrollPositions: Array<{element: HTMLElement, scrollTop: number}> = [];
+    allScrollables.forEach((child) => {
+      const el = child as HTMLElement;
+      const computedStyle = window.getComputedStyle(el);
+      if ((computedStyle.overflow === 'auto' || computedStyle.overflow === 'scroll') && el.scrollTop > 0) {
+        scrollPositions.push({element: el, scrollTop: el.scrollTop});
+        el.scrollTop = 0;
+      }
+      // Remove height constraints from scrollable containers
+      if (el.classList.contains('handwritten-scroll') || computedStyle.overflow === 'auto') {
+        el.style.height = 'auto';
+        el.style.maxHeight = 'none';
+      }
     });
 
-    // Get full height including scrollable content
-    const originalHeight = element.style.height;
-    const originalOverflow = element.style.overflow;
-    
-    // For scrollable containers, temporarily adjust to show all content
-    const scrollArea = element.querySelector('.handwritten-scroll') as HTMLElement;
-    if (scrollArea) {
-      scrollArea.style.height = 'auto';
-      scrollArea.style.maxHeight = 'none';
-    }
+    // Get actual content dimensions
+    const fullHeight = element.scrollHeight;
+    const fullWidth = element.scrollWidth;
 
     const canvas = await html2canvas(element, {
       scale: 2,
@@ -34,20 +66,26 @@ export const captureAndDownload = async (elementId: string, filename: string) =>
       allowTaint: true,
       backgroundColor: '#fff',
       logging: false,
-      windowHeight: element.scrollHeight || element.offsetHeight,
+      windowHeight: fullHeight * 2, // Account for scale
+      windowWidth: fullWidth * 2,
+      imageTimeout: 0,
     });
 
     // Restore original styles
-    if (scrollArea) {
-      scrollArea.style.height = '';
-      scrollArea.style.maxHeight = '';
-    }
-    element.style.height = originalHeight;
-    element.style.overflow = originalOverflow;
-    
+    element.style.height = originalStyles.height;
+    element.style.maxHeight = originalStyles.maxHeight;
+    element.style.overflow = originalStyles.overflow;
+    element.style.width = originalStyles.width;
+
+    // Restore parent styles
+    parents.forEach(({element: el, overflow, height}) => {
+      el.style.overflow = overflow;
+      el.style.height = height;
+    });
+
     // Restore scroll positions
-    originalScrollPositions.forEach((scrollTop, el) => {
-      (el as any).scrollTop = scrollTop;
+    scrollPositions.forEach(({element: el, scrollTop}) => {
+      el.scrollTop = scrollTop;
     });
 
     const link = document.createElement('a');
