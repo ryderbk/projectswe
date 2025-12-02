@@ -138,19 +138,34 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
         />
         <FloatingHearts />
         <div
-          className="relative z-10 w-full max-w-xl text-center"
+          className="relative z-10 max-w-2xl mx-auto px-6 text-center"
           style={{
-            transition: `opacity ${SMOOTH}ms ease, transform ${SMOOTH}ms ease`,
+            background: "white",
+            borderRadius: 16,
+            padding: "40px 36px",
+            boxShadow: "0 20px 50px rgba(16,24,40,0.08)",
+            minWidth: 280,
+            transition: "opacity 560ms cubic-bezier(.2,.9,.2,1), transform 560ms cubic-bezier(.2,.9,.2,1)",
             opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(12px)",
+            transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(.997)",
           }}
         >
-          <div className="glass-card p-10 rounded-2xl shadow-xl">
-            <p className="font-serif text-2xl md:text-3xl text-foreground leading-relaxed">
-              Unkuda indha mari innum neraiya moments experience pannanum nu romba aasaiya irukku ma 🤍
-            </p>
-            <button onClick={onContinue} className="btn-romantic mt-8">
-              Continue ❤️
+          <h2
+            className="font-serif text-3xl md:text-4xl text-primary mb-4"
+            style={{
+              lineHeight: 1.05,
+            }}
+          >
+            Unkuda indha mari innum neraiya moments experience pannanum nu romba aasaiya irukku ma 🤍
+          </h2>
+
+          <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 24 }}>
+            <button
+              onClick={onContinue}
+              className="btn-romantic px-10 py-4 text-lg"
+              aria-label="Continue"
+            >
+              Next ❤️
             </button>
           </div>
         </div>
