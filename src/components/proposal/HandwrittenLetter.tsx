@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
+import { FloatingSparkles } from "./FloatingSparkles";
+import { EnvelopeOpening } from "./EnvelopeOpening";
 import { captureAndDownload } from "./screenshotUtils";
 
 interface HandwrittenLetterProps {
@@ -8,6 +10,7 @@ interface HandwrittenLetterProps {
 
 export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps) {
   const [mounted, setMounted] = useState(false);
+  const [showLetter, setShowLetter] = useState(false);
   const mountedRef = useRef(false);
   const SMOOTH = 550;
 
@@ -16,6 +19,20 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
     mountedRef.current = true;
     requestAnimationFrame(() => requestAnimationFrame(() => setMounted(true)));
   }, []);
+
+  if (!showLetter) {
+    return (
+      <>
+        <FloatingHearts />
+        <FloatingSparkles />
+        <EnvelopeOpening
+          onOpen={() => {
+            setShowLetter(true);
+          }}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="h-screen w-screen flex items-start justify-center pt-8 pb-8 relative overflow-hidden">
@@ -29,6 +46,7 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
       />
 
       <FloatingHearts />
+      <FloatingSparkles />
 
       <div
         id="letter-container"
