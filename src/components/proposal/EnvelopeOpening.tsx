@@ -56,22 +56,22 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
         </h1>
 
         {/* Glass Card with Envelope */}
-        <div className="glass-card p-8 rounded-2xl shadow-xl">
+        <div className="glass-card p-12 rounded-2xl shadow-xl">
           {!opened ? (
             // Closed Envelope
             <div
               onClick={handleOpen}
               className="cursor-pointer transition-all"
               style={{
-                perspective: "1000px",
+                perspective: "1200px",
               }}
             >
-              {/* Envelope */}
+              {/* Envelope Shape - Like 💌 emoji */}
               <div
                 style={{
                   width: "100%",
-                  height: "280px",
-                  maxWidth: "300px",
+                  maxWidth: "260px",
+                  height: "200px",
                   margin: "0 auto",
                   position: "relative",
                   transform: mounted && !opened ? "scale(1)" : "scale(0.9)",
@@ -79,79 +79,82 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
                   transition: `transform ${SMOOTH}ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity ${SMOOTH}ms ease`,
                 }}
               >
-                {/* Envelope Body */}
+                {/* Envelope Body - White rectangle */}
                 <div
                   style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                    background: "linear-gradient(135deg, hsl(350 100% 92%) 0%, hsl(20 100% 94%) 100%)",
-                    borderRadius: "12px",
-                    border: "2px solid hsl(350 90% 85%)",
-                    boxShadow: "inset 0 1px 3px rgba(255, 255, 255, 0.6), 0 12px 28px hsl(0 100% 74% / 0.12)",
-                    overflow: "hidden",
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "65%",
+                    background: "linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 96%) 100%)",
+                    borderRadius: "4px",
+                    border: "2px solid hsl(0 0% 85%)",
+                    boxShadow: "inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 12px 28px hsl(350 100% 74% / 0.15)",
+                  }}
+                />
+
+                {/* Envelope Flap - Triangle on top */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: 0,
+                    height: 0,
+                    borderLeft: "130px solid transparent",
+                    borderRight: "130px solid transparent",
+                    borderTop: "120px solid hsl(0 0% 96%)",
+                    transition: opened ? `transform 550ms cubic-bezier(0.36, 0, 0.66, -0.56)` : "none",
+                    transformOrigin: "top center",
+                    filter: "drop-shadow(0 8px 16px hsl(350 100% 74% / 0.12))",
+                    animation: !opened && mounted ? "gentleFloat 3s ease-in-out infinite" : "none",
+                  }}
+                />
+
+                {/* Heart on envelope */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "35%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    fontSize: "32px",
+                    opacity: !opened ? 1 : 0,
+                    transition: `opacity 300ms ease`,
+                    pointerEvents: "none",
                   }}
                 >
-                  {/* Envelope Flap - Opens upward */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: "50%",
-                      background: "linear-gradient(180deg, hsl(350 95% 88%) 0%, hsl(350 100% 92%) 100%)",
-                      transformOrigin: "top center",
-                      transition: "none",
-                      transform: "rotateX(0deg)",
-                      borderBottom: "2px solid hsl(350 85% 80%)",
-                    }}
-                  />
-
-                  {/* Envelope Front Content */}
-                  <div
-                    className="flex-1 flex flex-col items-center justify-center h-full"
-                    style={{
-                      animation: mounted ? "fadeInContent 550ms ease-out" : "none",
-                    }}
-                  >
-                    <div style={{ fontSize: "56px", marginBottom: "16px" }}>💌</div>
-                    <div
-                      className="font-serif font-medium"
-                      style={{
-                        fontSize: "16px",
-                        letterSpacing: "1.2px",
-                        color: "hsl(350 70% 55%)",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      Click to Open
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        color: "hsl(350 50% 65%)",
-                        marginTop: "12px",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      A message from my heart
-                    </div>
-                  </div>
+                  ❤️
                 </div>
+
+                {/* Envelope line detail */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "60%",
+                    left: "50%",
+                    width: "80%",
+                    height: "2px",
+                    transform: "translateX(-50%)",
+                    background: "linear-gradient(90deg, transparent, hsl(0 0% 85%), transparent)",
+                  }}
+                />
               </div>
 
               {/* Hover hint */}
               <div
                 style={{
-                  marginTop: "20px",
-                  fontSize: "13px",
+                  marginTop: "40px",
+                  fontSize: "14px",
                   color: "hsl(0 0% 50%)",
+                  fontWeight: 500,
                   opacity: 0.6,
                   animation: "pulse-hint 2s ease-in-out infinite",
                 }}
               >
-                ↑ Click to reveal
+                Click to open
               </div>
             </div>
           ) : (
@@ -186,7 +189,7 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
                       height: "8px",
                       borderRadius: "50%",
                       background: "hsl(0 100% 74%)",
-                      animation: `bounce ${1.4}s ease-in-out infinite`,
+                      animation: `bounce 1.4s ease-in-out infinite`,
                       animationDelay: `${i * 0.2}s`,
                     }}
                   />
@@ -204,15 +207,6 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
 
       {/* Animations */}
       <style>{`
-        @keyframes fadeInContent {
-          0% {
-            opacity: 0;
-          }
-          100% {
-            opacity: 1;
-          }
-        }
-
         @keyframes slideUpContent {
           0% {
             opacity: 0;
@@ -243,6 +237,15 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
           50% {
             transform: translateY(-12px);
             opacity: 1;
+          }
+        }
+
+        @keyframes gentleFloat {
+          0%, 100% {
+            transform: translateX(-50%) translateY(0);
+          }
+          50% {
+            transform: translateX(-50%) translateY(-8px);
           }
         }
       `}</style>
