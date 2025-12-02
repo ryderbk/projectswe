@@ -95,7 +95,7 @@ export const PrayerPage = ({ onContinue }: PrayerPageProps) => {
               }`}
               disabled={!personalWish.trim()}
             >
-              Save Wish
+              Wish
             </button>
           </div>
 
