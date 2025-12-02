@@ -73,7 +73,7 @@ export const VowPage: React.FC<VowPageProps> = ({
         spawnConfetti();
       }, revealDelay * vows.length + 700);
       timersRef.current.push(finishT);
-    }, 520); // small intro pause
+    }, 2500); // longer intro pause to let user read the intro text
     timersRef.current.push(introT);
 
     return () => {
