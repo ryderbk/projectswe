@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { FloatingHearts } from "./FloatingHearts";
 
 interface EnvelopeOpeningProps {
   onOpen?: () => void;
@@ -8,11 +9,11 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
   const [mounted, setMounted] = useState(false);
   const [opened, setOpened] = useState(false);
   const mountedRef = useRef(false);
+  const SMOOTH = 550;
 
   useEffect(() => {
     if (mountedRef.current) return;
     mountedRef.current = true;
-    // Paint delay: wait for browser to render, then reveal
     requestAnimationFrame(() => requestAnimationFrame(() => setMounted(true)));
   }, []);
 
@@ -20,19 +21,22 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
     setOpened(true);
     setTimeout(() => {
       onOpen?.();
-    }, 850); // Wait for all animations to complete
+    }, 850);
   };
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background */}
+    <div className="h-screen w-screen flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Background - Match the gradient from other pages */}
       <div
         className="fixed inset-0 z-0"
         style={{
           background:
-            "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 96%) 60%, hsl(30 100% 97%) 100%)",
+            "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 55%, hsl(30 100% 97%) 100%)",
         }}
+        aria-hidden
       />
+
+      <FloatingHearts />
 
       {/* Main Container */}
       <div
@@ -44,29 +48,21 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
         {/* Envelope */}
         <div
           onClick={handleOpen}
-          className="cursor-pointer"
+          className="cursor-pointer transition-all"
           style={{
-            width: "280px",
-            height: "180px",
-            transition: opened
-              ? "none"
-              : "transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 550ms ease",
-            transform: mounted && !opened ? "scale(1)" : opened ? "scale(1.05)" : "scale(0.9)",
+            width: "320px",
+            height: "200px",
+            transform: mounted && !opened ? "scale(1)" : opened ? "scale(1.02)" : "scale(0.9)",
             opacity: mounted ? 1 : 0,
-            filter: "drop-shadow(0 20px 40px rgba(244, 114, 182, 0.15))",
+            transition: opened ? "none" : `transform ${SMOOTH}ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity ${SMOOTH}ms ease`,
           }}
         >
-          {/* Envelope Body - Soft Pastel Pink */}
+          {/* Envelope Body - using glass-card style */}
           <div
+            className="glass-card h-full flex flex-col rounded-2xl relative overflow-hidden border-2"
             style={{
-              position: "relative",
-              width: "100%",
-              height: "100%",
-              background: "linear-gradient(135deg, hsl(350 100% 92%) 0%, hsl(20 100% 94%) 100%)",
-              borderRadius: "8px",
-              border: "2px solid hsl(350 90% 85%)",
-              boxShadow: "inset 0 1px 3px rgba(255, 255, 255, 0.6), 0 10px 25px rgba(244, 114, 182, 0.1)",
-              overflow: "hidden",
+              borderColor: "hsl(350 100% 85%)",
+              boxShadow: "0 20px 40px hsl(0 100% 74% / 0.15), inset 0 1px 3px rgba(255, 255, 255, 0.6)",
             }}
           >
             {/* Envelope Flap - Opens upward */}
@@ -79,79 +75,66 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
                 height: "50%",
                 background: "linear-gradient(180deg, hsl(350 95% 88%) 0%, hsl(350 100% 92%) 100%)",
                 transformOrigin: "top center",
-                transition: opened ? "transform 550ms cubic-bezier(0.36, 0, 0.66, -0.56)" : "none",
+                transition: opened ? `transform 550ms cubic-bezier(0.36, 0, 0.66, -0.56)` : "none",
                 transform: opened ? "rotateX(-130deg)" : "rotateX(0deg)",
                 borderBottom: "2px solid hsl(350 85% 80%)",
               }}
             />
 
-            {/* Letter Inside - Slides up */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "center",
-                padding: "20px 15px",
-                opacity: opened ? 1 : 0,
-                transition: opened ? "opacity 400ms ease-in 250ms, transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1) 250ms" : "none",
-                transform: opened ? "translateY(0)" : "translateY(40px)",
-              }}
-            >
-              {/* Letter Paper */}
-              <div
-                style={{
-                  width: "100%",
-                  height: "130px",
-                  background: "linear-gradient(135deg, hsl(0 0% 99%) 0%, hsl(30 100% 97%) 100%)",
-                  borderRadius: "4px",
-                  border: "1px solid hsl(0 0% 90%)",
-                  boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "hsl(0 0% 40%)",
-                  fontSize: "13px",
-                  fontFamily: "'Indie Flower', serif",
-                  textAlign: "center",
-                  padding: "12px",
-                }}
-              >
-                💌 Opening...
-              </div>
-            </div>
-
-            {/* Envelope Front Text */}
-            {!opened && (
+            {/* Letter Inside - Slides up on open */}
+            {opened && (
               <div
                 style={{
                   position: "absolute",
-                  top: "50%",
+                  top: 0,
                   left: 0,
                   right: 0,
                   bottom: 0,
                   display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
+                  alignItems: "flex-end",
                   justifyContent: "center",
-                  color: "hsl(350 70% 60%)",
-                  textAlign: "center",
-                  opacity: 0.7,
-                  transition: "opacity 300ms ease",
-                  opacity: mounted ? 0.7 : 0.3,
+                  padding: "20px 15px",
+                  opacity: 1,
+                  animation: "slideUpLetter 550ms cubic-bezier(0.34, 1.56, 0.64, 1) 250ms both",
                 }}
               >
-                <div style={{ fontSize: "28px", marginBottom: "8px" }}>💌</div>
                 <div
+                  className="rounded-lg shadow-lg"
                   style={{
+                    width: "100%",
+                    height: "130px",
+                    background: "linear-gradient(135deg, hsl(0 0% 99%) 0%, hsl(30 100% 97%) 100%)",
+                    border: "1px solid hsl(0 0% 90%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "hsl(0 0% 40%)",
                     fontSize: "13px",
-                    fontFamily: "'Indie Flower', serif",
-                    fontWeight: 500,
+                    fontFamily: "'Playfair Display', serif",
+                    textAlign: "center",
+                    padding: "12px",
+                  }}
+                >
+                  💌 Opening...
+                </div>
+              </div>
+            )}
+
+            {/* Envelope Front - shows when closed */}
+            {!opened && (
+              <div
+                className="flex-1 flex flex-col items-center justify-center"
+                style={{
+                  animation: mounted ? "fadeInEnvelope 550ms ease-out" : "none",
+                }}
+              >
+                <div style={{ fontSize: "40px", marginBottom: "12px" }}>💌</div>
+                <div
+                  className="font-serif font-medium"
+                  style={{
+                    fontSize: "14px",
                     letterSpacing: "1px",
+                    color: "hsl(350 70% 60%)",
                   }}
                 >
                   Click to Open
@@ -161,7 +144,7 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
           </div>
         </div>
 
-        {/* Subtle Sparkle Bursts on Open */}
+        {/* Sparkle Bursts on Open */}
         {opened && (
           <>
             {[...Array(6)].map((_, i) => (
@@ -172,9 +155,8 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
                   top: "50%",
                   left: "50%",
                   pointerEvents: "none",
-                  animation: `sparkle-burst-${i} 800ms ease-out forwards`,
                   "--angle": `${(i / 6) * 360}deg`,
-                  "--distance": "80px",
+                  "--distance": "100px",
                 } as React.CSSProperties & { "--angle": string; "--distance": string }}
               >
                 <style>
@@ -198,6 +180,7 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
                     borderRadius: "50%",
                     background: "hsl(0 100% 85%)",
                     boxShadow: "0 0 8px hsl(350 100% 75%)",
+                    animation: `sparkle-burst-${i} 800ms ease-out forwards`,
                   }}
                 />
               </div>
@@ -206,14 +189,25 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
         )}
       </div>
 
-      {/* Style for Glow Effect */}
+      {/* Animations */}
       <style>{`
-        @keyframes gentle-glow {
-          0%, 100% {
-            filter: drop-shadow(0 15px 30px rgba(244, 114, 182, 0.12));
+        @keyframes slideUpLetter {
+          0% {
+            opacity: 0;
+            transform: translateY(40px);
           }
-          50% {
-            filter: drop-shadow(0 15px 40px rgba(244, 114, 182, 0.2));
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeInEnvelope {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
           }
         }
       `}</style>
