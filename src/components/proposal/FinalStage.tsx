@@ -40,18 +40,8 @@ export const FinalStage = ({ photoPath }: FinalStageProps) => {
     return () => clearTimeout(t);
   }, []);
 
-  const handleDownload = async () => {
-    try {
-      const zipPath = new URL("../assets/memories/us🤍.zip", import.meta.url).href;
-      const link = document.createElement("a");
-      link.href = zipPath;
-      link.download = "us🤍.zip";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch {
-      console.error("Download failed");
-    }
+  const handleDownload = () => {
+    window.open("https://drive.google.com/file/d/1LMe0u-k8qBJTCd51HEuTG_4cLHkX1yJt/view?usp=sharing", "_blank");
   };
 
   const today = new Date().toLocaleDateString("en-US", {
