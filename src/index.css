@@ -8,13 +8,13 @@
   :root {
     /* Romantic warm palette */
     --background: 30 100% 97%;
-    --foreground: 0 0% 38%;
+    --foreground: 0 0% 30%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 38%;
+    --card-foreground: 0 0% 30%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 38%;
+    --popover-foreground: 0 0% 30%;
 
     /* Coral primary */
     --primary: 0 100% 74%;
@@ -22,13 +22,13 @@
 
     /* Blush secondary */
     --secondary: 350 100% 93%;
-    --secondary-foreground: 0 0% 38%;
+    --secondary-foreground: 0 0% 30%;
 
     --muted: 30 30% 90%;
     --muted-foreground: 0 0% 42%;
 
     --accent: 350 100% 88%;
-    --accent-foreground: 0 0% 38%;
+    --accent-foreground: 0 0% 30%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;

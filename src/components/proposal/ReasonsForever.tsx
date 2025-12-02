@@ -129,7 +129,7 @@ export const ReasonsForever = ({ onContinue, revealDelay = 700 }: ReasonsForever
                     transitionDuration: `${TRANS_DUR}ms`,
                   }}
                 >
-                  <p className="m-0 text-center text-gray-600 leading-relaxed">
+                  <p className="m-0 text-center text-gray-700 leading-relaxed">
                     {text}
                   </p>
                 </div>
