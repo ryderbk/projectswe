@@ -115,7 +115,8 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
                   fontFamily:
                     "'Indie Flower', 'Segoe UI Historic', 'Segoe UI', sans-serif",
                   fontSize: "1.28rem",
-                  lineHeight: "1.9rem",
+                  lineHeight: "2.4rem",
+                  wordSpacing: "0.15rem",
                   color: "#333",
                   maxWidth: "none",
                 }}
