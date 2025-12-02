@@ -61,9 +61,8 @@ export default {
         glow: "hsl(var(--glow))",
       },
       fontFamily: {
-        sans: ['Dancing Script', 'cursive'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         serif: ['Playfair Display', 'Georgia', 'serif'],
-        romantic: ['Dancing Script', 'cursive'],
       },
       fontSize: {
         'hero': ['clamp(2rem, 8vw, 3.5rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
