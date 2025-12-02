@@ -85,10 +85,10 @@ export const ProposalApp = ({
 
   // Flow handlers (rearranged: memory page after vow, before handwritten)
   const handleLandingContinue = useCallback(() => setStage("timeline"), []);
-  const handleTimelineContinue = useCallback(() => setStage("reasonsforever"), []);
+  const handleTimelineContinue = useCallback(() => setStage("threewords"), []);
   const handleMemoryCarouselContinue = useCallback(() => setStage("handwritten"), []);
-  const handleReasonsForeverContinue = useCallback(() => setStage("threewords"), []);
-  const handleThreeWordsContinue = useCallback(() => setStage("quiz"), []);
+  const handleReasonsForeverContinue = useCallback(() => setStage("quiz"), []);
+  const handleThreeWordsContinue = useCallback(() => setStage("reasonsforever"), []);
   const handleQuizContinue = useCallback(() => setStage("pickone"), []);
   const handlePickOneContinue = useCallback(() => setStage("spinwheel"), []);
   const handleSpinWheelContinue = useCallback(() => setStage("prayer"), []);
