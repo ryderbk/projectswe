@@ -12,6 +12,9 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
   const [mounted, setMounted] = useState(false);
   const [loadedMedia, setLoadedMedia] = useState<Set<number>>(new Set());
   const [showEndMessage, setShowEndMessage] = useState(false);
+  const [endMessageVisible, setEndMessageVisible] = useState(false);
+  const [carouselExiting, setCarouselExiting] = useState(false);
+  const [endMessageExiting, setEndMessageExiting] = useState(false);
   const revealRef = useRef(false);
 
   const SMOOTH = 550;
@@ -73,9 +76,16 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
   const nextPhoto = () => {
     if (photos.length === 0) return;
     if (showEndMessage) {
-      onContinue();
+      setEndMessageExiting(true);
+      setTimeout(() => onContinue(), SMOOTH);
     } else if (index === photos.length - 1) {
-      setShowEndMessage(true);
+      setCarouselExiting(true);
+      setTimeout(() => {
+        setShowEndMessage(true);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => setEndMessageVisible(true));
+        });
+      }, SMOOTH);
     } else {
       setIndex((i) => (i + 1) % photos.length);
     }
@@ -145,9 +155,9 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
             padding: "40px 36px",
             boxShadow: "0 20px 50px rgba(16,24,40,0.08)",
             minWidth: 280,
-            transition: "opacity 560ms cubic-bezier(.2,.9,.2,1), transform 560ms cubic-bezier(.2,.9,.2,1)",
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(.997)",
+            transition: `opacity ${SMOOTH}ms cubic-bezier(.2,.9,.2,1), transform ${SMOOTH}ms cubic-bezier(.2,.9,.2,1)`,
+            opacity: endMessageVisible && !endMessageExiting ? 1 : 0,
+            transform: endMessageVisible && !endMessageExiting ? "translateY(0) scale(1)" : "translateY(12px) scale(.97)",
           }}
         >
           <h2
@@ -161,7 +171,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
 
           <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 24 }}>
             <button
-              onClick={onContinue}
+              onClick={nextPhoto}
               className="btn-romantic px-10 py-4 text-lg"
               aria-label="Continue"
             >
@@ -191,9 +201,9 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
       <div
         className="relative z-10 w-full max-w-xl text-center"
         style={{
-          transition: `opacity ${SMOOTH}ms ease, transform ${SMOOTH}ms ease`,
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? "translateY(0)" : "translateY(12px)",
+          transition: `opacity ${SMOOTH}ms cubic-bezier(.2,.9,.2,1), transform ${SMOOTH}ms cubic-bezier(.2,.9,.2,1)`,
+          opacity: mounted && !carouselExiting ? 1 : 0,
+          transform: mounted && !carouselExiting ? "translateY(0) scale(1)" : carouselExiting ? "translateY(-12px) scale(.97)" : "translateY(12px)",
         }}
       >
         <h1 className="font-serif text-hero text-foreground mb-6">
