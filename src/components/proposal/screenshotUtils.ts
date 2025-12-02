@@ -56,9 +56,10 @@ export const captureAndDownload = async (elementId: string, filename: string) =>
       }
     });
 
-    // Get actual content dimensions
-    const fullHeight = element.scrollHeight;
-    const fullWidth = element.scrollWidth;
+    // Get bounding rect to capture only visible content
+    const rect = element.getBoundingClientRect();
+    const contentHeight = element.scrollHeight;
+    const contentWidth = element.scrollWidth;
 
     const canvas = await html2canvas(element, {
       scale: 2,
@@ -66,9 +67,11 @@ export const captureAndDownload = async (elementId: string, filename: string) =>
       allowTaint: true,
       backgroundColor: '#fff',
       logging: false,
-      windowHeight: fullHeight * 2, // Account for scale
-      windowWidth: fullWidth * 2,
+      windowHeight: contentHeight,
+      windowWidth: contentWidth,
       imageTimeout: 0,
+      height: contentHeight,
+      width: contentWidth,
     });
 
     // Restore original styles
