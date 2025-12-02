@@ -8,78 +8,62 @@ export const captureAndDownload = async (elementId: string, filename: string) =>
       return;
     }
 
-    // Store original styles
-    const originalStyles = {
-      height: element.style.height,
-      maxHeight: element.style.maxHeight,
-      overflow: element.style.overflow,
-      width: element.style.width,
+    // Store original styles for element and all descendants
+    const originalStyles = new Map<HTMLElement, {height: string, maxHeight: string, overflow: string}>();
+    
+    const storeStyles = (el: HTMLElement) => {
+      originalStyles.set(el, {
+        height: el.style.height,
+        maxHeight: el.style.maxHeight,
+        overflow: el.style.overflow,
+      });
     };
 
-    // Store all parent styles that might clip content
-    const parents: Array<{element: HTMLElement, overflow: string, height: string, maxHeight: string}> = [];
-    let parent = element.parentElement;
-    while (parent) {
-      const computedStyle = window.getComputedStyle(parent);
-      if (computedStyle.overflow === 'hidden' || computedStyle.overflow === 'auto' || computedStyle.overflow === 'scroll') {
-        parents.push({
-          element: parent,
-          overflow: parent.style.overflow,
-          height: parent.style.height,
-          maxHeight: parent.style.maxHeight,
-        });
-        parent.style.overflow = 'visible';
-        parent.style.height = 'auto';
-        parent.style.maxHeight = 'none';
-      }
-      parent = parent.parentElement;
-    }
+    // Store main element
+    storeStyles(element);
+    element.querySelectorAll('*').forEach((child) => {
+      storeStyles(child as HTMLElement);
+    });
 
-    // Store and reset all scrollable children
-    const allChildren = element.querySelectorAll('*');
-    const scrollPositions: Array<{element: HTMLElement, scrollTop: number}> = [];
-    const childStyles: Array<{element: HTMLElement, height: string, maxHeight: string, overflow: string}> = [];
+    // Reset ALL height/overflow constraints in the entire tree
+    const resetConstraints = (el: HTMLElement) => {
+      el.style.height = 'auto';
+      el.style.maxHeight = 'none';
+      el.style.overflow = 'visible';
+      el.querySelectorAll('*').forEach((child) => {
+        const c = child as HTMLElement;
+        c.style.height = 'auto';
+        c.style.maxHeight = 'none';
+        c.style.overflow = 'visible';
+      });
+    };
     
-    allChildren.forEach((child) => {
+    resetConstraints(element);
+
+    // Reset scroll positions
+    element.querySelectorAll('*').forEach((child) => {
       const el = child as HTMLElement;
-      const computedStyle = window.getComputedStyle(el);
-      
-      // Store scroll position
-      if (el.scrollHeight > el.clientHeight && el.scrollTop > 0) {
-        scrollPositions.push({element: el, scrollTop: el.scrollTop});
+      if (el.scrollHeight > el.clientHeight) {
         el.scrollTop = 0;
-      }
-      
-      // Reset height constraints for scrollable/handwritten areas
-      if (el.classList.contains('handwritten-scroll') || 
-          el.classList.contains('handwritten-content') ||
-          computedStyle.overflow === 'auto' || 
-          computedStyle.overflow === 'scroll') {
-        childStyles.push({
-          element: el,
-          height: el.style.height,
-          maxHeight: el.style.maxHeight,
-          overflow: el.style.overflow,
-        });
-        el.style.height = 'auto';
-        el.style.maxHeight = 'none';
-        el.style.overflow = 'visible';
       }
     });
 
-    // Reset main element dimensions
-    element.style.height = 'auto';
-    element.style.maxHeight = 'none';
-    element.style.overflow = 'visible';
-    element.style.width = '100%';
+    // Force layout recalculation
+    await new Promise(resolve => {
+      requestAnimationFrame(() => {
+        // Trigger a reflow
+        const _ = element.offsetHeight;
+        requestAnimationFrame(resolve);
+      });
+    });
 
-    // Get full content dimensions
-    const fullHeight = element.scrollHeight;
-    const fullWidth = Math.min(element.scrollWidth, 1200); // Max reasonable width
+    // Get the full content dimensions after expansion
+    const fullHeight = element.scrollHeight + 40; // Add padding
+    const fullWidth = element.scrollWidth;
 
-    // Capture with proper dimensions
+    // Capture with scale 1 to avoid cutting off content
     const canvas = await html2canvas(element, {
-      scale: 1.5,
+      scale: 1,
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
@@ -87,31 +71,14 @@ export const captureAndDownload = async (elementId: string, filename: string) =>
       windowHeight: fullHeight,
       windowWidth: fullWidth,
       imageTimeout: 0,
+      proxy: null,
     });
 
     // Restore all original styles
-    element.style.height = originalStyles.height;
-    element.style.maxHeight = originalStyles.maxHeight;
-    element.style.overflow = originalStyles.overflow;
-    element.style.width = originalStyles.width;
-
-    // Restore parent styles
-    parents.forEach(({element: el, overflow, height, maxHeight}) => {
-      el.style.overflow = overflow;
-      el.style.height = height;
-      el.style.maxHeight = maxHeight;
-    });
-
-    // Restore child styles
-    childStyles.forEach(({element: el, height, maxHeight, overflow}) => {
-      el.style.height = height;
-      el.style.maxHeight = maxHeight;
-      el.style.overflow = overflow;
-    });
-
-    // Restore scroll positions
-    scrollPositions.forEach(({element: el, scrollTop}) => {
-      el.scrollTop = scrollTop;
+    originalStyles.forEach((styles, el) => {
+      el.style.height = styles.height;
+      el.style.maxHeight = styles.maxHeight;
+      el.style.overflow = styles.overflow;
     });
 
     // Download the image
