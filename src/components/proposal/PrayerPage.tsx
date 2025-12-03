@@ -1,7 +1,6 @@
 // src/components/proposal/PrayerPage.tsx
 import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
-import { captureAndDownload } from "./screenshotUtils";
 
 interface PrayerPageProps {
   onContinue: () => void;
@@ -23,12 +22,10 @@ export const PrayerPage = ({ onContinue }: PrayerPageProps) => {
     });
   }, []);
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!personalWish.trim()) return;
 
     setSaved(true);
-
-    await captureAndDownload("prayer-container", "my-prayer.png");
 
     // Continue after short pause
     setTimeout(() => {

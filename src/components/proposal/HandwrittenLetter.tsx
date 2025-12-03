@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
 import { FloatingSparkles } from "./FloatingSparkles";
 import { EnvelopeOpening } from "./EnvelopeOpening";
-import { captureAndDownload } from "./screenshotUtils";
 
 interface HandwrittenLetterProps {
   onContinue?: () => void;
@@ -145,11 +144,8 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
               <div className="mt-6 flex justify-end">
                 <button
                   onClick={() => {
-                    captureAndDownload("letter-container", "my-letter.png");
-                    setTimeout(() => {
-                      setMounted(false);
-                      setTimeout(() => onContinue && onContinue(), SMOOTH);
-                    }, 100);
+                    setMounted(false);
+                    setTimeout(() => onContinue && onContinue(), SMOOTH);
                   }}
                   className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl shadow text-lg bg-white/40 hover:bg-white/60 transition-all"
                   style={{

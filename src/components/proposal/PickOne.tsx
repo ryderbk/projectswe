@@ -1,7 +1,6 @@
 // src/components/proposal/PickOne.tsx
 import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
-import { captureAndDownload } from "./screenshotUtils";
 
 interface PickOneProps {
   onContinue: () => void;
@@ -45,8 +44,7 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
     if (choice === id) return;
     setChoice(id);
 
-    setTimeout(async () => {
-      await captureAndDownload("pickone-container", `picked-${options[id].title}.png`);
+    setTimeout(() => {
       onContinue();
     }, SELECT_DELAY);
   };
