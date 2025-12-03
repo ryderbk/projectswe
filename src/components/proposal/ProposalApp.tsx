@@ -24,7 +24,6 @@ import memoryH from "@/assets/memories/H.mp4";
 import memoryI from "@/assets/memories/I.mp4";
 import memoryJ from "@/assets/memories/J.mp4";
 import memoryK from "@/assets/memories/K.mp4";
-import envelopeImage from "@/assets/envelope.png";
 
 type Stage =
   | "landing"
@@ -53,29 +52,6 @@ export const ProposalApp = ({
   startStage = "landing",
 }: ProposalAppProps) => {
   const [stage, setStage] = useState<Stage>(startStage);
-
-  // Preload all images and videos immediately when the app loads
-  useEffect(() => {
-    const imagesToPreload = [
-      memoryA, memoryB, memoryC, memoryD, memoryE, memoryF, memoryG,
-      envelopeImage
-    ];
-    const videosToPreload = [memoryH, memoryI, memoryJ, memoryK];
-
-    // Preload images
-    imagesToPreload.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
-
-    // Preload videos
-    videosToPreload.forEach((src) => {
-      const video = document.createElement("video");
-      video.preload = "auto";
-      video.src = src;
-      video.load();
-    });
-  }, []);
 
   // Memory carousel photos in alphabetical order
   const memories = [
