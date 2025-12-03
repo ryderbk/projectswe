@@ -1,4 +1,4 @@
-const preloadedMedia = new Map<string, HTMLImageElement | HTMLVideoElement>();
+const preloadedMedia = new Map<string, HTMLImageElement | HTMLVideoElement | HTMLAudioElement>();
 const loadingPromises = new Map<string, Promise<void>>();
 
 export const preloadImage = (src: string): Promise<void> => {
@@ -25,6 +25,42 @@ export const preloadImage = (src: string): Promise<void> => {
     img.onerror = () => {
       resolve();
     };
+  });
+
+  loadingPromises.set(src, promise);
+  return promise;
+};
+
+export const preloadAudio = (src: string): Promise<void> => {
+  if (loadingPromises.has(src)) {
+    return loadingPromises.get(src)!;
+  }
+
+  const promise = new Promise<void>((resolve) => {
+    if (preloadedMedia.has(src)) {
+      resolve();
+      return;
+    }
+
+    const audio = new Audio();
+    audio.preload = "auto";
+    audio.src = src;
+    
+    audio.oncanplaythrough = () => {
+      preloadedMedia.set(src, audio);
+      resolve();
+    };
+    
+    audio.onloadeddata = () => {
+      preloadedMedia.set(src, audio);
+      resolve();
+    };
+    
+    audio.onerror = () => {
+      resolve();
+    };
+
+    audio.load();
   });
 
   loadingPromises.set(src, promise);
@@ -73,6 +109,9 @@ export const preloadMedia = (src: string): Promise<void> => {
   if (src.endsWith(".mp4") || src.endsWith(".webm") || src.endsWith(".mov")) {
     return preloadVideo(src);
   }
+  if (src.endsWith(".mp3") || src.endsWith(".wav") || src.endsWith(".ogg") || src.endsWith(".m4a")) {
+    return preloadAudio(src);
+  }
   return preloadImage(src);
 };
 
@@ -84,6 +123,6 @@ export const isMediaLoaded = (src: string): boolean => {
   return preloadedMedia.has(src);
 };
 
-export const getLoadedMedia = (src: string): HTMLImageElement | HTMLVideoElement | undefined => {
+export const getLoadedMedia = (src: string): HTMLImageElement | HTMLVideoElement | HTMLAudioElement | undefined => {
   return preloadedMedia.get(src);
 };
