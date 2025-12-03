@@ -30,17 +30,17 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
   const options = [
     {
       id: 0,
-      title: "Coffee Date",
+      title: "Coffee Date☕",
       desc: "Warm coffee, soft talks, and my favourite person.",
     },
     {
       id: 1,
-      title: "Kaalan Date",
+      title: "Kaalan Date🍛",
       desc: "Spicy kaalan and your cute reactions while eating it.",
     },
     {
       id: 2,
-      title: "Ilaineer Date",
+      title: "Ilaineer Date🥥",
       desc: "Fresh coconut water, calm breeze, and peaceful time together.",
     },
   ];
