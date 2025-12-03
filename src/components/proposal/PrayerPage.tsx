@@ -10,7 +10,9 @@ export const PrayerPage = ({ onContinue }: PrayerPageProps) => {
   const [mounted, setMounted] = useState(false);
   const [personalWish, setPersonalWish] = useState("");
   const [saved, setSaved] = useState(false);
+  const [exiting, setExiting] = useState(false);
   const revealRef = useRef(false);
+  const timerRef = useRef<number | null>(null);
   const SMOOTH = 550;
 
   useEffect(() => {
@@ -20,6 +22,10 @@ export const PrayerPage = ({ onContinue }: PrayerPageProps) => {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => setMounted(true));
     });
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
 
   const handleSave = () => {
@@ -28,9 +34,15 @@ export const PrayerPage = ({ onContinue }: PrayerPageProps) => {
     setSaved(true);
 
     // Continue after short pause
-    setTimeout(() => {
-      onContinue();
+    timerRef.current = window.setTimeout(() => {
+      setExiting(true);
     }, 1000);
+  };
+
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (exiting && e.propertyName === "opacity") {
+      onContinue();
+    }
   };
 
   return (
@@ -54,9 +66,10 @@ export const PrayerPage = ({ onContinue }: PrayerPageProps) => {
         className="relative z-10 w-full max-w-xl text-center"
         style={{
           transition: `opacity ${SMOOTH}ms ease, transform ${SMOOTH}ms ease`,
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? "translateY(0)" : "translateY(14px)",
+          opacity: exiting ? 0 : mounted ? 1 : 0,
+          transform: exiting ? "translateY(-20px)" : mounted ? "translateY(0)" : "translateY(14px)",
         }}
+        onTransitionEnd={handleTransitionEnd}
       >
         {/* Heading with inline emoji kept on the same line */}
         <h1 className="font-serif text-hero text-foreground mb-6 whitespace-nowrap flex items-center justify-center gap-2">

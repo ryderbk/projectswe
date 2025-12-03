@@ -12,7 +12,9 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
   const [showLetter, setShowLetter] = useState(false);
   const [envelopeExiting, setEnvelopeExiting] = useState(false);
   const [letterEntering, setLetterEntering] = useState(false);
+  const [exiting, setExiting] = useState(false);
   const mountedRef = useRef(false);
+  const timerRef = useRef<number | null>(null);
   const SMOOTH = 550;
   const TRANSITION = 600;
 
@@ -20,16 +22,30 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
     if (mountedRef.current) return;
     mountedRef.current = true;
     requestAnimationFrame(() => requestAnimationFrame(() => setMounted(true)));
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
 
   const handleEnvelopeOpen = () => {
     setEnvelopeExiting(true);
-    setTimeout(() => {
+    timerRef.current = window.setTimeout(() => {
       setShowLetter(true);
-      setTimeout(() => {
+      timerRef.current = window.setTimeout(() => {
         setLetterEntering(true);
       }, 50);
     }, TRANSITION);
+  };
+
+  const handleContinue = () => {
+    setExiting(true);
+  };
+
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (exiting && e.propertyName === "opacity") {
+      onContinue && onContinue();
+    }
   };
 
   if (!showLetter) {
@@ -66,10 +82,11 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
         id="letter-container"
         className="relative z-10 w-[96vw]"
         style={{
-          transition: `opacity ${TRANSITION}ms cubic-bezier(.2,.9,.2,1), transform ${TRANSITION}ms cubic-bezier(.2,.9,.2,1)`,
-          opacity: letterEntering ? 1 : 0,
-          transform: letterEntering ? "translateY(0) scale(1)" : "translateY(40px) scale(0.97)",
+          transition: `opacity ${SMOOTH}ms cubic-bezier(.2,.9,.2,1), transform ${SMOOTH}ms cubic-bezier(.2,.9,.2,1)`,
+          opacity: exiting ? 0 : letterEntering ? 1 : 0,
+          transform: exiting ? "translateY(-20px) scale(0.98)" : letterEntering ? "translateY(0) scale(1)" : "translateY(40px) scale(0.97)",
         }}
+        onTransitionEnd={handleTransitionEnd}
       >
         <h1 className="font-serif text-4xl md:text-5xl text-foreground text-center mb-6">
           A Letter For You 🤍
@@ -143,10 +160,7 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
               {/* BUTTON AT THE END */}
               <div className="mt-6 flex justify-end">
                 <button
-                  onClick={() => {
-                    setMounted(false);
-                    setTimeout(() => onContinue && onContinue(), SMOOTH);
-                  }}
+                  onClick={handleContinue}
                   className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl shadow text-lg bg-white/40 hover:bg-white/60 transition-all"
                   style={{
                     backdropFilter: "blur(10px)",

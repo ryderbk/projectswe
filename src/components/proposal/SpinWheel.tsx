@@ -9,7 +9,7 @@ interface SpinWheelProps {
 const DEFAULT_OPTIONS = [
   "Sing a song for me 🎤",
   "Send a cute selfie video 🎥",
-  "Send a voice message saying “I love you, chellam.” 💗",
+  'Send a voice message saying "I love you, chellam." 💗',
   "Call me when you have a chance 📞",
   "Text me something you've thought but never told me 💬",
   "Send a short dance video 💃",
@@ -19,7 +19,9 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({ onContinue }) => {
   const options = DEFAULT_OPTIONS;
 
   const [mounted, setMounted] = useState(false);
+  const [exiting, setExiting] = useState(false);
   const mountedRef = useRef(false);
+  const isMountedRef = useRef(true);
 
   const [index, setIndex] = useState<number>(() =>
     Math.floor(Math.random() * options.length)
@@ -47,12 +49,14 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
   useEffect(() => {
     if (mountedRef.current) return;
     mountedRef.current = true;
+    isMountedRef.current = true;
     requestAnimationFrame(() => {
       requestAnimationFrame(() => setMounted(true));
     });
 
     // cleanup on unmount
     return () => {
+      isMountedRef.current = false;
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (stopTimeoutRef.current) clearTimeout(stopTimeoutRef.current);
     };
@@ -122,10 +126,12 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
     setSpinning(true);
 
     intervalRef.current = window.setInterval(() => {
+      if (!isMountedRef.current) return;
       setIndex((i) => (i + 1) % options.length);
     }, tickMs);
 
     stopTimeoutRef.current = window.setTimeout(() => {
+      if (!isMountedRef.current) return;
       if (intervalRef.current) clearInterval(intervalRef.current);
 
       const finalIndex = Math.floor(Math.random() * options.length);
@@ -133,6 +139,7 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
       const slowSteps = 8;
 
       const slowSpin = () => {
+        if (!isMountedRef.current) return;
         step++;
         setIndex((finalIndex + step) % options.length);
         if (step < slowSteps) {
@@ -148,6 +155,7 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
           setSpinning(false);
 
           stopTimeoutRef.current = window.setTimeout(() => {
+            if (!isMountedRef.current) return;
             setFinished(true);
           }, settlePauseMs);
         }
@@ -165,6 +173,16 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
     setResult(null);
     setFinished(false);
     setIndex(Math.floor(Math.random() * options.length));
+  };
+
+  const handleDone = () => {
+    setExiting(true);
+  };
+
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (exiting && e.propertyName === "opacity") {
+      onContinue();
+    }
   };
 
   return (
@@ -185,9 +203,10 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
         className="relative z-10 text-center max-w-xl w-full"
         style={{
           transition: "opacity 550ms ease, transform 550ms ease",
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? "translateY(0)" : "translateY(12px)",
+          opacity: exiting ? 0 : mounted ? 1 : 0,
+          transform: exiting ? "translateY(-20px)" : mounted ? "translateY(0)" : "translateY(12px)",
         }}
+        onTransitionEnd={handleTransitionEnd}
       >
         {/* Heading (inline heart) */}
         <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-8 whitespace-nowrap flex items-center justify-center gap-2">
@@ -251,7 +270,7 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
 
             {result && (
               <>
-                <button onClick={() => onContinue()} className="btn-romantic px-8 py-3">
+                <button onClick={handleDone} className="btn-romantic px-8 py-3">
                   Done
                 </button>
 

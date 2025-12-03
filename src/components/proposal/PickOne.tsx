@@ -9,7 +9,9 @@ interface PickOneProps {
 export const PickOne = ({ onContinue }: PickOneProps) => {
   const [mounted, setMounted] = useState(false);
   const [choice, setChoice] = useState<number | null>(null);
+  const [exiting, setExiting] = useState(false);
   const revealRef = useRef(false);
+  const timerRef = useRef<number | null>(null);
 
   const SMOOTH = 550;
   const SELECT_DELAY = 900; // ⬅️ REDUCED DELAY
@@ -20,6 +22,10 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => setMounted(true));
     });
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
 
   const options = [
@@ -44,9 +50,15 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
     if (choice === id) return;
     setChoice(id);
 
-    setTimeout(() => {
-      onContinue();
+    timerRef.current = window.setTimeout(() => {
+      setExiting(true);
     }, SELECT_DELAY);
+  };
+
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (exiting && e.propertyName === "opacity") {
+      onContinue();
+    }
   };
 
   return (
@@ -66,9 +78,10 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
         className="relative z-10 w-full max-w-2xl text-center"
         style={{
           transition: `opacity ${SMOOTH}ms ease, transform ${SMOOTH}ms ease`,
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? "translateY(0)" : "translateY(14px)",
+          opacity: exiting ? 0 : mounted ? 1 : 0,
+          transform: exiting ? "translateY(-20px)" : mounted ? "translateY(0)" : "translateY(14px)",
         }}
+        onTransitionEnd={handleTransitionEnd}
       >
         <h1 className="font-serif text-hero text-foreground mb-6">
           Pick One For Us — when we met 🤍
@@ -76,7 +89,7 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-8">
           <p className="text-muted-foreground mb-6">
-            Choose what you’d like us to do next — I’ll make it happen ✨
+            Choose what you'd like us to do next — I'll make it happen ✨
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
