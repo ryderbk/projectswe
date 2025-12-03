@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Confetti } from "./Confetti";
 import { AnimatedHeartSVG } from "./HeartIcon";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface ProposalRevealStageProps {
   onAccept: () => void; // called only after YES flow completes
@@ -94,11 +93,6 @@ export const ProposalRevealStage = ({ onAccept }: ProposalRevealStageProps) => {
 
       {/* confetti canvas */}
       <Confetti active={confettiActive} duration={3800} />
-
-      {/* FLOATING HEARTS — ABOVE ALL ELEMENTS */}
-      <div className="pointer-events-none fixed inset-0 z-[999]">
-        <FloatingHearts />
-      </div>
 
       <div className="relative z-10 text-center max-w-2xl mx-auto px-4">
         {/* Intro block */}

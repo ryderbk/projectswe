@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface QuizPageProps {
   onContinue: () => void;
@@ -78,8 +77,6 @@ export const QuizPage = ({ onContinue }: QuizPageProps) => {
             "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 55%, hsl(30 100% 97%) 100%)",
         }}
       />
-
-      <FloatingHearts />
 
       {/* MAIN QUIZ CARD */}
       <div

@@ -1,6 +1,5 @@
 // src/components/proposal/SpinWheel.tsx
 import React, { useEffect, useRef, useState } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface SpinWheelProps {
   onContinue: () => void;
@@ -195,8 +194,6 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
             "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 55%, hsl(30 100% 97%) 100%)",
         }}
       />
-
-      <FloatingHearts />
 
       <div
         id="spinwheel-container"

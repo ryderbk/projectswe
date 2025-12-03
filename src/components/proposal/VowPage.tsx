@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface VowPageProps {
   onContinue: () => void;
@@ -139,8 +138,6 @@ export const VowPage: React.FC<VowPageProps> = ({
         }}
         aria-hidden
       />
-
-      <FloatingHearts />
 
       <div
         className="max-w-3xl w-full bg-white rounded-2xl shadow-soft p-8 sm:p-10 text-center relative"

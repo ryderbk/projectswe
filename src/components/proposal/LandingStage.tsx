@@ -1,5 +1,4 @@
 import { HeartIcon } from './HeartIcon';
-import { FloatingHearts } from "./FloatingHearts";
 
 interface LandingStageProps {
   onContinue: () => void;
@@ -18,9 +17,6 @@ export const LandingStage = ({ onContinue }: LandingStageProps) => {
         }}
         aria-hidden
       />
-
-      {/* Floating hearts visible from first page */}
-      <FloatingHearts />
 
       {/* Content */}
       <div 

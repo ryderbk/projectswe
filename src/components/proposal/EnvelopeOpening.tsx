@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { FloatingHearts } from "./FloatingHearts";
-import { FloatingSparkles } from "./FloatingSparkles";
 import envelopeImage from "@/assets/envelope.png";
 
 interface EnvelopeOpeningProps {
@@ -37,9 +35,6 @@ export const EnvelopeOpening = ({ onOpen }: EnvelopeOpeningProps) => {
         }}
         aria-hidden
       />
-
-      <FloatingHearts />
-      <FloatingSparkles />
 
       {/* Content Container */}
       <div

@@ -1,6 +1,5 @@
 // src/components/proposal/ReasonsForever.tsx
 import { useEffect, useRef, useState } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface ReasonsForeverProps {
   onContinue: () => void;
@@ -96,11 +95,6 @@ export const ReasonsForever = ({ onContinue, revealDelay = 700 }: ReasonsForever
         }}
         aria-hidden
       />
-
-      {/* FLOATING HEARTS — ABOVE ALL ELEMENTS */}
-      <div className="pointer-events-none fixed inset-0 z-[999]">
-        <FloatingHearts />
-      </div>
 
       {/* Main content (z-10 so hearts remain above) */}
       <div

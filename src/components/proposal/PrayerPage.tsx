@@ -1,6 +1,5 @@
 // src/components/proposal/PrayerPage.tsx
 import { useEffect, useRef, useState } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface PrayerPageProps {
   onContinue: () => void;
@@ -56,9 +55,6 @@ export const PrayerPage = ({ onContinue }: PrayerPageProps) => {
         }}
         aria-hidden
       />
-
-      {/* FloatingHearts — original placement (behind content) */}
-      <FloatingHearts />
 
       {/* Content */}
       <div

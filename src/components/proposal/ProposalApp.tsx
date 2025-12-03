@@ -13,6 +13,8 @@ import { ProposalRevealStage } from "./ProposalRevealStage";
 import { FinalStage } from "./FinalStage";
 import { AudioController } from "./AudioController";
 import HandwrittenLetter from "./HandwrittenLetter";
+import { FloatingHearts } from "./FloatingHearts";
+import { FloatingSparkles } from "./FloatingSparkles";
 import { preloadAllMedia } from "@/utils/mediaPreloader";
 import memoryA from "@/assets/memories/a.png";
 import memoryB from "@/assets/memories/b.png";
@@ -167,6 +169,10 @@ export const ProposalApp = ({
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
+      {/* Global floating elements - persist across all pages */}
+      <FloatingHearts />
+      <FloatingSparkles />
+
       {stage === "landing" && <LandingStage onContinue={handleLandingContinue} />}
 
       {stage === "timeline" && <Timeline onContinue={handleTimelineContinue} />}

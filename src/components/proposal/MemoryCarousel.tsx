@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 import { isMediaLoaded } from "@/utils/mediaPreloader";
 
 interface MemoryCarouselProps {
@@ -97,7 +96,6 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
               "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 55%, hsl(30 100% 97%) 100%)",
           }}
         />
-        <FloatingHearts />
         <div
           className="relative z-10 w-full max-w-md text-center"
           style={{
@@ -137,8 +135,6 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
             "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 55%, hsl(30 100% 97%) 100%)",
         }}
       />
-
-      <FloatingHearts />
 
       {/* Content */}
       <div

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatedHeartSVG } from "./HeartIcon";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface HandwrittenLetterProps {
   onContinue?: () => void;
@@ -29,9 +28,6 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
         }}
         aria-hidden
       />
-
-      {/* floating decorative hearts */}
-      <FloatingHearts />
 
       {/* Content card */}
       <div

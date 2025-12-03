@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { FloatingHearts } from "./FloatingHearts";
-import { FloatingSparkles } from "./FloatingSparkles";
 import { EnvelopeOpening } from "./EnvelopeOpening";
 
 interface HandwrittenLetterProps {
@@ -57,8 +55,6 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
           transform: envelopeExiting ? "scale(0.95)" : "scale(1)",
         }}
       >
-        <FloatingHearts />
-        <FloatingSparkles />
         <EnvelopeOpening onOpen={handleEnvelopeOpen} />
       </div>
     );
@@ -74,9 +70,6 @@ export default function HandwrittenLetter({ onContinue }: HandwrittenLetterProps
             "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 96%) 60%, hsl(30 100% 97%) 100%)",
         }}
       />
-
-      <FloatingHearts />
-      <FloatingSparkles />
 
       <div
         id="letter-container"

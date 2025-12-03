@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface TimelineProps {
   onContinue: () => void;
@@ -53,8 +52,6 @@ export const Timeline = ({ onContinue }: TimelineProps) => {
             "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 96%) 60%, hsl(30 100% 97%) 100%)",
         }}
       />
-
-      <FloatingHearts />
 
       {/* Content */}
       <div

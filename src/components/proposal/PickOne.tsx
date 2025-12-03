@@ -1,6 +1,5 @@
 // src/components/proposal/PickOne.tsx
 import { useEffect, useRef, useState } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface PickOneProps {
   onContinue: () => void;
@@ -71,8 +70,6 @@ export const PickOne = ({ onContinue }: PickOneProps) => {
             "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 55%, hsl(30 100% 97%) 100%)",
         }}
       />
-
-      <FloatingHearts />
 
       <div
         className="relative z-10 w-full max-w-2xl text-center"

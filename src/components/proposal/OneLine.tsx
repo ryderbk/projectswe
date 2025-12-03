@@ -1,6 +1,5 @@
 // src/components/proposal/OneLine.tsx
 import { useEffect, useRef, useState } from "react";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface OneLineProps {
   onContinue: () => void;
@@ -91,8 +90,6 @@ export const OneLine = ({ onContinue }: OneLineProps) => {
         }}
         aria-hidden
       />
-
-      <FloatingHearts />
 
       <div
         className="relative z-10 w-full max-w-2xl text-center"

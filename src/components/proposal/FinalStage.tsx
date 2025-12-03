@@ -1,7 +1,6 @@
 // src/components/proposal/FinalStage.tsx
 import { useState, useEffect, useRef } from "react";
 import { AnimatedHeartSVG } from "./HeartIcon";
-import { FloatingHearts } from "./FloatingHearts";
 
 interface FinalStageProps {
   photoPath: string;
@@ -78,11 +77,6 @@ export const FinalStage = ({ photoPath }: FinalStageProps) => {
             "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 50%, hsl(30 100% 97%) 100%)",
         }}
       />
-
-      {/* ❤️ FLOATING HEARTS — ALWAYS ABOVE EVERYTHING */}
-      <div className="pointer-events-none fixed inset-0 z-[999]">
-        <FloatingHearts />
-      </div>
 
       {/* CONTENT */}
       {contentMounted && (
