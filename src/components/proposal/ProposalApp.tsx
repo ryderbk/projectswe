@@ -81,6 +81,7 @@ export const ProposalApp = ({
     "First time onna neraiya neram okandhom. See how you look at me. Idhye mari paaru epomye.",
     "The first dance with you. Dance varadhu nu therinjum unakaga aadunen. Semma jolly.",
     "The most beautiful and memorable birthday ever ma. Kammi wishes dhan vandhuchu, but i didn't feel about it because of you.",
+    "Unkuda indha mari innum neraiya moments experience pannanum nu romba aasaiya irukku ma 🤍",
   ];
 
   // Flow handlers (rearranged: memory page after vow, before handwritten)

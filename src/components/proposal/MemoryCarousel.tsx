@@ -11,10 +11,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
   const [index, setIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [loadedMedia, setLoadedMedia] = useState<Set<number>>(new Set());
-  const [showEndMessage, setShowEndMessage] = useState(false);
-  const [endMessageVisible, setEndMessageVisible] = useState(false);
   const [carouselExiting, setCarouselExiting] = useState(false);
-  const [endMessageExiting, setEndMessageExiting] = useState(false);
   const revealRef = useRef(false);
 
   const SMOOTH = 550;
@@ -75,17 +72,9 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
 
   const nextPhoto = () => {
     if (photos.length === 0) return;
-    if (showEndMessage) {
-      setEndMessageExiting(true);
-      setTimeout(() => onContinue(), SMOOTH);
-    } else if (index === photos.length - 1) {
+    if (index === photos.length - 1) {
       setCarouselExiting(true);
-      setTimeout(() => {
-        setShowEndMessage(true);
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => setEndMessageVisible(true));
-        });
-      }, SMOOTH);
+      setTimeout(() => onContinue(), SMOOTH);
     } else {
       setIndex((i) => (i + 1) % photos.length);
     }
@@ -135,58 +124,6 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
     );
   }
 
-  // --- END MESSAGE UI ---
-  if (showEndMessage) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
-        <div
-          className="fixed inset-0 z-0"
-          style={{
-            background:
-              "linear-gradient(135deg, hsl(30 100% 97%) 0%, hsl(350 100% 95%) 55%, hsl(30 100% 97%) 100%)",
-          }}
-        />
-        <FloatingHearts />
-        <div
-          className="relative z-10 max-w-2xl mx-auto px-6 text-center"
-          style={{
-            transition: `opacity ${SMOOTH}ms cubic-bezier(.2,.9,.2,1), transform ${SMOOTH}ms cubic-bezier(.2,.9,.2,1)`,
-            opacity: endMessageVisible && !endMessageExiting ? 1 : 0,
-            transform: endMessageVisible && !endMessageExiting ? "translateY(0) scale(1)" : endMessageExiting ? "translateY(-20px) scale(.97)" : "translateY(30px) scale(.97)",
-          }}
-        >
-          <div
-            style={{
-              background: "white",
-              borderRadius: 16,
-              padding: "36px 32px",
-              boxShadow: "0 20px 50px rgba(16,24,40,0.08)",
-              minWidth: 280,
-            }}
-          >
-            <h2
-              className="font-serif text-2xl md:text-3xl text-primary"
-              style={{
-                lineHeight: 1.3,
-              }}
-            >
-              Unkuda indha mari innum neraiya moments experience pannanum nu romba aasaiya irukku ma 🤍
-            </h2>
-          </div>
-
-          <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 24 }}>
-            <button
-              onClick={nextPhoto}
-              className="btn-romantic px-10 py-4 text-lg"
-              aria-label="Continue"
-            >
-              Next ❤️
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // --- NORMAL UI ---
   return (
