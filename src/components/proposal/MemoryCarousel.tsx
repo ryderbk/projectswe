@@ -17,7 +17,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
   const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
 
   const SMOOTH = 550;
-  const SLIDE_TRANSITION = 500;
+  const SLIDE_TRANSITION = 250;
 
   useEffect(() => {
     if (photos.length === 0) return;
@@ -178,8 +178,8 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
           <div 
-            className="w-full rounded-xl overflow-hidden soft-glow relative bg-white/50"
-            style={{ aspectRatio: "4/3" }}
+            className="w-full rounded-xl overflow-hidden soft-glow relative"
+            style={{ aspectRatio: "4/3", backgroundColor: "transparent" }}
           >
             {photos.map((src, idx) => {
               const isActive = idx === activeIndex;
@@ -193,8 +193,9 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                     inset: 0,
                     opacity: isActive ? 1 : 0,
                     zIndex: isActive ? 2 : 1,
-                    transition: `opacity ${SLIDE_TRANSITION}ms ease-in-out`,
+                    transition: `opacity ${SLIDE_TRANSITION}ms cubic-bezier(0.4, 0, 0.2, 1)`,
                     pointerEvents: isActive ? "auto" : "none",
+                    willChange: "opacity",
                   }}
                 >
                   {isVideo ? (
@@ -209,6 +210,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
+                        backgroundColor: "#f8f4f6",
                       }}
                     />
                   ) : (
@@ -216,11 +218,12 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                       src={src}
                       alt={`Memory ${idx + 1}`}
                       loading="eager"
-                      decoding="async"
+                      decoding="sync"
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
+                        backgroundColor: "#f8f4f6",
                       }}
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).src =
@@ -234,9 +237,9 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
             
             {isCurrentLoading && !isAnimating && (
               <div 
-                className="absolute inset-0 flex items-center justify-center bg-white/50 z-10"
+                className="absolute inset-0 flex items-center justify-center z-10"
                 style={{
-                  transition: "opacity 200ms ease",
+                  transition: "opacity 150ms ease",
                 }}
               >
                 <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
