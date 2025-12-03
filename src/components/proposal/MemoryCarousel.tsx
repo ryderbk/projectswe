@@ -216,8 +216,6 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
 
           <div
             style={{
-              transition: `opacity ${SLIDE_TRANSITION}ms ease-in-out`,
-              opacity: isTransitioning ? 0 : 1,
               minHeight: captions[index] ? "auto" : 0,
             }}
           >
