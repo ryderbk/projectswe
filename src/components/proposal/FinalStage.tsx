@@ -141,7 +141,7 @@ export const FinalStage = ({ photoPath }: FinalStageProps) => {
             </p>
 
             <p className="font-serif text-2xl text-foreground mb-1">
-              I'm going to hold your hand until the end.
+              I’ll hold your hand until the very last moment.
             </p>
 
             <div
