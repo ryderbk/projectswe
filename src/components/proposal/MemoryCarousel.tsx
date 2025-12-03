@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { isMediaLoaded } from "@/utils/mediaPreloader";
 
 interface MemoryCarouselProps {
@@ -8,16 +8,16 @@ interface MemoryCarouselProps {
 }
 
 export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: MemoryCarouselProps) => {
-  const [index, setIndex] = useState(0);
-  const [displayIndex, setDisplayIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [loadedMedia, setLoadedMedia] = useState<Set<number>>(new Set());
   const [carouselExiting, setCarouselExiting] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const revealRef = useRef(false);
+  const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
 
   const SMOOTH = 550;
-  const SLIDE_TRANSITION = 400;
+  const SLIDE_TRANSITION = 500;
 
   useEffect(() => {
     if (photos.length === 0) return;
@@ -26,6 +26,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
       if (src.endsWith(".mp4")) {
         const video = document.createElement("video");
         video.preload = "auto";
+        video.muted = true;
         video.src = src;
         video.onloadeddata = () => {
           setLoadedMedia(prev => new Set(prev).add(i));
@@ -41,10 +42,10 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
   }, [photos]);
 
   useEffect(() => {
-    if (index >= photos.length) {
-      setIndex(Math.max(0, photos.length - 1));
+    if (activeIndex >= photos.length) {
+      setActiveIndex(Math.max(0, photos.length - 1));
     }
-  }, [photos.length, index]);
+  }, [photos.length, activeIndex]);
 
   useEffect(() => {
     if (revealRef.current) return;
@@ -57,88 +58,62 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (photos.length === 0 || isTransitioning) return;
+      if (photos.length === 0 || isAnimating) return;
       if (e.key === "ArrowRight") {
-        goToSlide((index + 1) % photos.length);
+        goToSlide((activeIndex + 1) % photos.length);
       } else if (e.key === "ArrowLeft") {
-        goToSlide((index - 1 + photos.length) % photos.length);
+        goToSlide((activeIndex - 1 + photos.length) % photos.length);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [photos.length, index, isTransitioning]);
+  }, [photos.length, activeIndex, isAnimating]);
 
-  const goToSlide = (newIndex: number) => {
-    if (isTransitioning || newIndex === index) return;
+  const goToSlide = useCallback((newIndex: number) => {
+    if (isAnimating || newIndex === activeIndex) return;
     
-    setIsTransitioning(true);
-    setIndex(newIndex);
+    setIsAnimating(true);
+    setActiveIndex(newIndex);
     
     setTimeout(() => {
-      setDisplayIndex(newIndex);
-      setIsTransitioning(false);
+      setIsAnimating(false);
     }, SLIDE_TRANSITION);
-  };
+  }, [isAnimating, activeIndex]);
 
   const nextPhoto = () => {
-    if (photos.length === 0 || isTransitioning) return;
-    if (index === photos.length - 1) {
+    if (photos.length === 0 || isAnimating) return;
+    if (activeIndex === photos.length - 1) {
       setCarouselExiting(true);
       setTimeout(() => onContinue(), SMOOTH);
     } else {
-      goToSlide(index + 1);
+      goToSlide(activeIndex + 1);
     }
   };
 
   const prevPhoto = () => {
-    if (photos.length === 0 || isTransitioning) return;
-    goToSlide((index - 1 + photos.length) % photos.length);
+    if (photos.length === 0 || isAnimating) return;
+    goToSlide((activeIndex - 1 + photos.length) % photos.length);
   };
 
-  const renderMedia = (mediaIndex: number, isActive: boolean) => {
-    const src = photos[mediaIndex];
-    if (!src) return null;
-
-    const baseStyle: React.CSSProperties = {
-      position: "absolute",
-      inset: 0,
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-      transition: `opacity ${SLIDE_TRANSITION}ms ease-in-out`,
-      opacity: isActive ? 1 : 0,
-    };
-
-    if (src.endsWith(".mp4")) {
-      return (
-        <video
-          key={`video-${mediaIndex}`}
-          src={src}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          style={baseStyle}
-        />
-      );
+  const handleVideoRef = (el: HTMLVideoElement | null, idx: number) => {
+    if (el) {
+      videoRefs.current.set(idx, el);
+      if (idx === activeIndex) {
+        el.play().catch(() => {});
+      }
     }
-
-    return (
-      <img
-        key={`img-${mediaIndex}`}
-        src={src}
-        alt={`Memory ${mediaIndex + 1}`}
-        loading="eager"
-        decoding="async"
-        style={baseStyle}
-        onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src =
-            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='100%25' height='100%25' fill='%23f8f4f6'/%3E%3Ctext x='50%25' y='50%25' fill='%23999' font-family='Arial' font-size='24' dominant-baseline='middle' text-anchor='middle'%3EImage not available%3C/text%3E%3C/svg%3E";
-        }}
-      />
-    );
   };
+
+  useEffect(() => {
+    videoRefs.current.forEach((video, idx) => {
+      if (idx === activeIndex) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
+  }, [activeIndex]);
 
   if (!photos || photos.length === 0) {
     return (
@@ -177,6 +152,8 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
     );
   }
 
+  const isCurrentLoading = !loadedMedia.has(activeIndex) && !isMediaLoaded(photos[activeIndex]);
+
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
       <div
@@ -201,27 +178,80 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
           <div 
-            className="w-full rounded-xl overflow-hidden soft-glow relative"
+            className="w-full rounded-xl overflow-hidden soft-glow relative bg-white/50"
             style={{ aspectRatio: "4/3" }}
           >
-            {!loadedMedia.has(index) && !isMediaLoaded(photos[index]) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
+            {photos.map((src, idx) => {
+              const isActive = idx === activeIndex;
+              const isVideo = src.endsWith(".mp4");
+              
+              return (
+                <div
+                  key={`media-${idx}`}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    opacity: isActive ? 1 : 0,
+                    zIndex: isActive ? 2 : 1,
+                    transition: `opacity ${SLIDE_TRANSITION}ms ease-in-out`,
+                    pointerEvents: isActive ? "auto" : "none",
+                  }}
+                >
+                  {isVideo ? (
+                    <video
+                      ref={(el) => handleVideoRef(el, idx)}
+                      src={src}
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={src}
+                      alt={`Memory ${idx + 1}`}
+                      loading="eager"
+                      decoding="async"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src =
+                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='100%25' height='100%25' fill='%23f8f4f6'/%3E%3Ctext x='50%25' y='50%25' fill='%23999' font-family='Arial' font-size='24' dominant-baseline='middle' text-anchor='middle'%3EImage not available%3C/text%3E%3C/svg%3E";
+                      }}
+                    />
+                  )}
+                </div>
+              );
+            })}
+            
+            {isCurrentLoading && !isAnimating && (
+              <div 
+                className="absolute inset-0 flex items-center justify-center bg-white/50 z-10"
+                style={{
+                  transition: "opacity 200ms ease",
+                }}
+              >
                 <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
               </div>
             )}
-            
-            {renderMedia(displayIndex, !isTransitioning)}
-            {isTransitioning && renderMedia(index, true)}
           </div>
 
           <div
             style={{
-              minHeight: captions[index] ? "auto" : 0,
+              minHeight: captions[activeIndex] ? "auto" : 0,
             }}
           >
-            {captions[index] && (
+            {captions[activeIndex] && (
               <p className="text-center text-foreground font-serif italic mt-4 mb-2 text-lg leading-relaxed tracking-wide">
-                {captions[index]}
+                {captions[activeIndex]}
               </p>
             )}
           </div>
@@ -230,21 +260,21 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
             <button 
               onClick={prevPhoto} 
               className="btn-secondary-romantic px-6"
-              disabled={isTransitioning}
+              disabled={isAnimating}
             >
               ‹ Prev
             </button>
             <button 
               onClick={nextPhoto} 
               className="btn-secondary-romantic px-6"
-              disabled={isTransitioning}
+              disabled={isAnimating}
             >
               Next ›
             </button>
           </div>
 
           <p className="text-muted-foreground text-sm mt-4 text-center">
-            {index + 1} / {photos.length}
+            {activeIndex + 1} / {photos.length}
           </p>
         </div>
       </div>
