@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { FloatingHearts } from "./FloatingHearts";
+import { isMediaLoaded } from "@/utils/mediaPreloader";
 
 interface MemoryCarouselProps {
   onContinue: () => void;
@@ -155,7 +156,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
           {/* Image / Video */}
           <div className="w-full rounded-xl overflow-hidden soft-glow relative">
-            {!loadedMedia.has(index) && (
+            {!loadedMedia.has(index) && !isMediaLoaded(photos[index]) && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
                 <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
               </div>
@@ -170,12 +171,15 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
                 playsInline
                 preload="auto"
                 className="w-full h-auto object-cover aspect-[4/3]"
+                style={{ contentVisibility: "auto" }}
               />
             ) : (
               <img
                 src={photos[index]}
                 alt={`Memory ${index + 1}`}
                 loading="eager"
+                decoding="async"
+                fetchPriority="high"
                 className="w-full h-auto object-cover aspect-[4/3]"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src =

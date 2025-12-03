@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { LandingStage } from "./LandingStage";
 import { Timeline } from "./Timeline";
 import { MemoryCarousel } from "./MemoryCarousel";
@@ -13,6 +13,7 @@ import { ProposalRevealStage } from "./ProposalRevealStage";
 import { FinalStage } from "./FinalStage";
 import { AudioController } from "./AudioController";
 import HandwrittenLetter from "./HandwrittenLetter";
+import { preloadAllMedia } from "@/utils/mediaPreloader";
 import memoryA from "@/assets/memories/a.png";
 import memoryB from "@/assets/memories/b.png";
 import memoryC from "@/assets/memories/c.png";
@@ -54,7 +55,7 @@ export const ProposalApp = ({
   const [stage, setStage] = useState<Stage>(startStage);
 
   // Memory carousel photos in alphabetical order
-  const memories = [
+  const memories = useMemo(() => [
     memoryA,
     memoryB,
     memoryC,
@@ -66,7 +67,12 @@ export const ProposalApp = ({
     memoryI,
     memoryJ,
     memoryK,
-  ];
+  ], []);
+
+  // Preload all media assets immediately when app loads
+  useEffect(() => {
+    preloadAllMedia(memories);
+  }, [memories]);
 
   // Memory captions
   const memoryCaptions = [
