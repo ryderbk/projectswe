@@ -3,20 +3,22 @@ import { isMediaLoaded } from "@/utils/mediaPreloader";
 
 interface MemoryCarouselProps {
   onContinue: () => void;
-  photos?: string[]; // now optional
-  captions?: string[]; // optional captions for each photo
+  photos?: string[];
+  captions?: string[];
 }
 
 export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: MemoryCarouselProps) => {
   const [index, setIndex] = useState(0);
+  const [displayIndex, setDisplayIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [loadedMedia, setLoadedMedia] = useState<Set<number>>(new Set());
   const [carouselExiting, setCarouselExiting] = useState(false);
   const revealRef = useRef(false);
 
   const SMOOTH = 550;
+  const SLIDE_TRANSITION = 400;
 
-  // Preload all photos and videos on mount
   useEffect(() => {
     if (photos.length === 0) return;
     
@@ -38,13 +40,11 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
     });
   }, [photos]);
 
-  // Ensure index is valid if photos change
   useEffect(() => {
     if (index >= photos.length) {
       setIndex(Math.max(0, photos.length - 1));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos.length]);
+  }, [photos.length, index]);
 
   useEffect(() => {
     if (revealRef.current) return;
@@ -55,37 +55,91 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
     });
   }, []);
 
-  // Keyboard support: left / right to navigate
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (photos.length === 0) return;
+      if (photos.length === 0 || isTransitioning) return;
       if (e.key === "ArrowRight") {
-        setIndex((i) => (photos.length ? (i + 1) % photos.length : 0));
+        goToSlide((index + 1) % photos.length);
       } else if (e.key === "ArrowLeft") {
-        setIndex((i) => (photos.length ? (i - 1 + photos.length) % photos.length : 0));
+        goToSlide((index - 1 + photos.length) % photos.length);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [photos.length]);
+  }, [photos.length, index, isTransitioning]);
 
+  const goToSlide = (newIndex: number) => {
+    if (isTransitioning || newIndex === index) return;
+    
+    setIsTransitioning(true);
+    setIndex(newIndex);
+    
+    setTimeout(() => {
+      setDisplayIndex(newIndex);
+      setIsTransitioning(false);
+    }, SLIDE_TRANSITION);
+  };
 
   const nextPhoto = () => {
-    if (photos.length === 0) return;
+    if (photos.length === 0 || isTransitioning) return;
     if (index === photos.length - 1) {
       setCarouselExiting(true);
       setTimeout(() => onContinue(), SMOOTH);
     } else {
-      setIndex((i) => (i + 1) % photos.length);
+      goToSlide(index + 1);
     }
   };
 
   const prevPhoto = () => {
-    if (photos.length === 0) return;
-    setIndex((i) => (i - 1 + photos.length) % photos.length);
+    if (photos.length === 0 || isTransitioning) return;
+    goToSlide((index - 1 + photos.length) % photos.length);
   };
 
-  // --- EMPTY / FALLBACK UI ---
+  const renderMedia = (mediaIndex: number, isActive: boolean) => {
+    const src = photos[mediaIndex];
+    if (!src) return null;
+
+    const baseStyle: React.CSSProperties = {
+      position: "absolute",
+      inset: 0,
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      transition: `opacity ${SLIDE_TRANSITION}ms ease-in-out`,
+      opacity: isActive ? 1 : 0,
+    };
+
+    if (src.endsWith(".mp4")) {
+      return (
+        <video
+          key={`video-${mediaIndex}`}
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          style={baseStyle}
+        />
+      );
+    }
+
+    return (
+      <img
+        key={`img-${mediaIndex}`}
+        src={src}
+        alt={`Memory ${mediaIndex + 1}`}
+        loading="eager"
+        decoding="async"
+        style={baseStyle}
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).src =
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='100%25' height='100%25' fill='%23f8f4f6'/%3E%3Ctext x='50%25' y='50%25' fill='%23999' font-family='Arial' font-size='24' dominant-baseline='middle' text-anchor='middle'%3EImage not available%3C/text%3E%3C/svg%3E";
+        }}
+      />
+    );
+  };
+
   if (!photos || photos.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
@@ -113,7 +167,7 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
               <button onClick={onContinue} className="btn-romantic">
                 Continue
               </button>
-              <button onClick={() => { /* optional: open uploader if you have one */ }} className="btn-secondary-romantic">
+              <button onClick={() => {}} className="btn-secondary-romantic">
                 Add Later
               </button>
             </div>
@@ -123,11 +177,8 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
     );
   }
 
-
-  // --- NORMAL UI ---
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background */}
       <div
         className="fixed inset-0 z-0"
         style={{
@@ -136,7 +187,6 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
         }}
       />
 
-      {/* Content */}
       <div
         className="relative z-10 w-full max-w-xl text-center"
         style={{
@@ -150,59 +200,51 @@ export const MemoryCarousel = ({ onContinue, photos = [], captions = [] }: Memor
         </h1>
 
         <div className="glass-card p-6 rounded-2xl shadow-xl mb-10">
-          {/* Image / Video */}
-          <div className="w-full rounded-xl overflow-hidden soft-glow relative">
+          <div 
+            className="w-full rounded-xl overflow-hidden soft-glow relative"
+            style={{ aspectRatio: "4/3" }}
+          >
             {!loadedMedia.has(index) && !isMediaLoaded(photos[index]) && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
                 <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
               </div>
             )}
-            {photos[index]?.endsWith(".mp4") ? (
-              <video
-                key={photos[index]}
-                src={photos[index]}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                className="w-full h-auto object-cover aspect-[4/3]"
-                style={{ contentVisibility: "auto" }}
-              />
-            ) : (
-              <img
-                src={photos[index]}
-                alt={`Memory ${index + 1}`}
-                loading="eager"
-                decoding="async"
-                fetchPriority="high"
-                className="w-full h-auto object-cover aspect-[4/3]"
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src =
-                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='100%25' height='100%25' fill='%23f8f4f6'/%3E%3Ctext x='50%25' y='50%25' fill='%23999' font-family='Arial' font-size='24' dominant-baseline='middle' text-anchor='middle'%3EImage not available%3C/text%3E%3C/svg%3E";
-                }}
-              />
+            
+            {renderMedia(displayIndex, !isTransitioning)}
+            {isTransitioning && renderMedia(index, true)}
+          </div>
+
+          <div
+            style={{
+              transition: `opacity ${SLIDE_TRANSITION}ms ease-in-out`,
+              opacity: isTransitioning ? 0 : 1,
+              minHeight: captions[index] ? "auto" : 0,
+            }}
+          >
+            {captions[index] && (
+              <p className="text-center text-foreground font-serif italic mt-4 mb-2 text-lg leading-relaxed tracking-wide">
+                {captions[index]}
+              </p>
             )}
           </div>
 
-          {/* Caption */}
-          {captions[index] && (
-            <p className="text-center text-foreground font-serif italic mt-4 mb-2 text-lg leading-relaxed tracking-wide">
-              {captions[index]}
-            </p>
-          )}
-
-          {/* Controls */}
           <div className="flex justify-between mt-6">
-            <button onClick={prevPhoto} className="btn-secondary-romantic px-6">
+            <button 
+              onClick={prevPhoto} 
+              className="btn-secondary-romantic px-6"
+              disabled={isTransitioning}
+            >
               ‹ Prev
             </button>
-            <button onClick={nextPhoto} className="btn-secondary-romantic px-6">
+            <button 
+              onClick={nextPhoto} 
+              className="btn-secondary-romantic px-6"
+              disabled={isTransitioning}
+            >
               Next ›
             </button>
           </div>
 
-          {/* Indicator */}
           <p className="text-muted-foreground text-sm mt-4 text-center">
             {index + 1} / {photos.length}
           </p>
