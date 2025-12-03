@@ -256,7 +256,7 @@ const settlePauseMs = 1400; // ⬅️ longer outro pause
                   await captureAndDownload("spinwheel-container", "spin-wheel-result.png");
                   onContinue();
                 }} className="btn-romantic px-8 py-3">
-                  Done ✓
+                  Done
                 </button>
 
                 <button
