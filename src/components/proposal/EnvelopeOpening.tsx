@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FloatingHearts } from "./FloatingHearts";
 import { FloatingSparkles } from "./FloatingSparkles";
-import envelopeImage from "@/assets/envelope.jpg";
+import envelopeImage from "@/assets/envelope.png";
 
 interface EnvelopeOpeningProps {
   onOpen?: () => void;
